@@ -1,4 +1,8 @@
 install.packages("vegan")
+install.packages("plotrix")
+install.packages("car")
+install.packages("gdata")
+
 library(vegan)
 library(MASS)
 
@@ -6,7 +10,7 @@ library(MASS)
 ###RaMPs#############################################
 #####################################################
 ###call file from your machine 
-spp_matrix <- read.csv("c://Users/Sydney/Documents/Kali/College/Grad School/UNM/Konza/Species_Comp/RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+spp_matrix <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
 head(spp_matrix)
 ncol(spp_matrix)
 nrow(spp_matrix)
@@ -236,7 +240,7 @@ betad
 ###all years#####################################################
 #################################################################
 ###post rare removed
-spp.comp.rr <- read.csv("c://Users/Sydney/Documents/Kali/College/Grad School/UNM/Konza/Species_Comp/RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+spp.comp.rr <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
 head(spp.comp.rr)
 
 window.rr <- spp.comp.rr[,2:39]
@@ -616,7 +620,8 @@ c13 <- data.frame(DM_1[14:16,13])
 c14 <- data.frame(DM_1[15:16,14])
 c15 <- data.frame(DM_1[16:16,15])
 
-###library(gdata)
+###
+library(gdata)
 DM_1 <- cbindX(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15)
 colnames(DM_1) <- c("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10", "x11", "x12", "x13", "x14", "x15")
 
