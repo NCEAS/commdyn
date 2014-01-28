@@ -481,11 +481,11 @@ nrow(g.cs)
 g.cs
 
 g.cs <- ddply(sum.gc, .(treatment), summarise,
-								mean = mean(sum),
-								sd = sd(sum))
+				mean = mean(sum),
+				sd = sd(sum))
 
 g.cs <- ddply(g.cs, .(treatment), summarise, 
-										cs = mean/sd)
+				cs = mean/sd)
 
 #final
 g.cs
@@ -533,9 +533,8 @@ sum.ps <- ddply(spp.comp.long, .(ramp, species), summarise, sum = sum(value))
 sum.ps
 
 m <- ddply(sum.ps, .(ramp), summarise, 
-								mean = mean(sum),
-								sd = sd(sum))
-m
+				mean = mean(sum),
+				sd = sd(sum))
 
 Pop_Stb <- ddply(m, .(ramp), summarise, ps = mean/sd)
 Pop_Stb
@@ -657,7 +656,7 @@ par(mfrow = c(1, 1))
 par(mar=c(4, 4, 1, 2), xpd=TRUE)
 plot(DM_1.long$time.lag, DM_1.long$distance, type="n",
      xlab="distance",
-     ylab="creosote time lag",
+     ylab="time lag",
 		xlim=c(0,15), ylim=c(0,40))
 
 points(DM_1.long$time.lag, DM_1.long$distance, cex = 1.0, pch=16, col="#990000")
