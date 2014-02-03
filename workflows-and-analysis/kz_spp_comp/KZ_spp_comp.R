@@ -654,12 +654,12 @@ cor.DM_1.lag.pval
 ###plotting graph
 par(mfrow = c(1, 1))
 par(mar=c(4, 4, 1, 2), xpd=TRUE)
-plot(DM_1.long$time.lag, DM_1.long$distance, type="n",
-     xlab="distance",
-     ylab="time lag",
+plot(DM_1.long$distance, DM_1.long$time.lag, type="n",
+     xlab="time lag",
+     ylab="distance",
 		xlim=c(0,15), ylim=c(0,40))
 
-points(DM_1.long$time.lag, DM_1.long$distance, cex = 1.0, pch=16, col="#990000")
+points(DM_1.long$time.lag, DM_1.long$distance, cex = 1.0, pch=16, col="#99CC66")
 #install.packages("plotrix")
 require(plotrix)
 ablineclip(lm.DM_1, x1=0, x2=15, type="b", lty= 1, pch=16, lwd=3.5, col="#000000")
