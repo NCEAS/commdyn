@@ -16,8 +16,8 @@ dat = read.csv(
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
 
-# Blanks are the *real* missing values
-dat$species[dat$species == ""] = NA
+# Blanks are the *real* missing values -- representing empty plots.  Remove these values (irrelevant to analysis)
+dat = dat[dat$species != "",]
 
 dat$time.step = paste(dat$yr, dat$mo, dat$dy, sep = "-")
 
