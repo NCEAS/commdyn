@@ -1,6 +1,13 @@
 library(reshape2)
 library(plyr)
 
+# DATA CITATION: Ecological Archives E090-118-D1
+# S. K. Morgan Ernest, Thomas J. Valone, and James H. Brown. 2009. 
+#   Long-term monitoring and experimental manipulation of a Chihuahuan Desert 
+#   ecosystem near Portal, Arizona, USA. Ecology 90:1708.
+#
+# Metadata available from http://esapubs.org/archive/ecol/E090/118/metadata.htm
+
 dat = read.csv(
   "workflows-and-analysis/portal-rodents/Portal_rodents_19772002.csv", 
   as.is = TRUE
