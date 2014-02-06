@@ -2,11 +2,9 @@
 # =========
 # 
 # Group 1: Data set transformation to allow compute of many metrics
-# 
 #     Who: Erica Carl Scott Eric Sydney  Julie
 # 
 # Group 2: Time series analysis of community level metrics (consider higher freq data too)
-# 
 #     Who: Elizabeth Lauren Carl2 Seekell Julie Andrew
 # 
 # Datasets
@@ -30,8 +28,6 @@
 # Download data (maximum date ranges)
 
 konza <- read.csv("~/Downloads/PVC021.dat", na.strings=0)
-
-
 column.codes <- colnames(konza)
 
 column.definitions <- c("Data code (factor), same for all data in this dataset", 
@@ -85,7 +81,6 @@ dat$scientific.name <- scientific.name
 
 
 # translate abundance codes: code corresponds the midpoint of the percent cover range.  
-
 abundance_codes <- 
 c("0" = 0,
   "1" = 0.5,
@@ -96,14 +91,24 @@ c("0" = 0,
   "6" = 85,
   "7" = 98.5)
 
+## Idetnify the columns that need to be remapped
 data.cols <- grep("[A-D][1-9]", colnames(dat))
 
-sapply(dat, function(x){
+
+## Now use the code lookup table to translate the abundance codes to percent covers
+M <- data.frame(sapply(dat[data.cols], function(x){
   x <- as.character(x)
+  x[is.na(x)] <- "0"
   x[x==""] <- "0"
   abundance_codes[x]
-}
+}))
+dat[data.cols] <- M # stick the transformed columns back
 
 
 
+
+## Reshape the data into long format: site should be a variable
+A = melt(dat, id = names(dat)[-data.cols])
+
+B = dcast(A, variable + ... ~ scientific.name, value.var="value", fill = 0, fun.aggregate=max)
 
