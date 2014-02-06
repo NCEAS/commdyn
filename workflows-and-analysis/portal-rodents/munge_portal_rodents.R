@@ -17,6 +17,9 @@ dat = read.csv(
   as.is = TRUE
 )
 
+# Create a new note1 code for entries with no note
+dat$note1[dat$note1] = 0
+
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
 
@@ -27,10 +30,10 @@ dat$species[is.na(dat$species)] = "NA"
 dat$Empty = dat$note1 == 2
 
 # 4: plot not trapped (remove)
-dat = dat[which(dat$note1 != 4), ]
+dat = dat[dat$note1 != 4, ]
 
 # 13: non-target animal (remove)
-dat = dat[which(dat$note1 != 13), ]
+dat = dat[dat$note1 != 13, ]
 
 # Erroneous data has negative sampling period and is just removed for now
 dat = dat[dat$period > 0, ]
