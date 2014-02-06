@@ -12,8 +12,14 @@ dat = read.csv(
   "workflows-and-analysis/portal-rodents/Portal_rodents_19772002.csv", 
   as.is = TRUE
 )
-dat$time.step = paste(dat$yr, dat$mo, dat$dy, sep = "-")
+
+# There's a real species called NA, so make sure that the NAs are actually "NA"
+dat$species[is.na(dat$species)] = "NA"
+
+# Blanks are the *real* missing values
 dat$species[dat$species == ""] = NA
+
+dat$time.step = paste(dat$yr, dat$mo, dat$dy, sep = "-")
 
 wide.data = dcast(
   data = dat, 
