@@ -1,12 +1,7 @@
 # -- Eric's script to calculate diversity metrics for Corinna's fish data set
 
-# -- set working directory
-new_wd_path<-'/workflows-and-analysis/diversity_partitioning_script'
-setwd('workflows-and-analysis/diversity_partitioning_script')
-# -- set working directory
-
 # -- reach Corinna's fish data set
-dat.obs<-read.csv('NTLfishmatrix.csv')
+dat.obs<-read.csv('workflows-and-analysis/diversity_partitioning_script/NTLfishmatrix.csv')
 
 # -- make a grouping data frame and a species table
 dat.groups<-dat.obs[,c("lakeid","year4")]
@@ -14,7 +9,7 @@ spp.list<-names(dat.obs)[c(-1,-2)]
 dat.spp<-dat.obs[,spp.list]
 
 # -- load script file with function for calculating diversity metric
-source('fn.divpart.groups.R')
+source('workflows-and-analysis/diversity_partitioning_script/fn.divpart.groups.R')
 
 # ---------------------------
 # -- beta diversity by year
