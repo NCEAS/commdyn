@@ -1,8 +1,8 @@
 # -- Eric's script to calculate diversity metrics for Corinna's fish data set
 
 # -- set working directory
-new_wd_path<-'/workflows-and-analysis/Diversity_partitioning_script'
-setwd('workflows-and-analysis/Diversity_partitioning_script')
+new_wd_path<-'/workflows-and-analysis/diversity_partitioning_script'
+setwd('workflows-and-analysis/diversity_partitioning_script')
 # -- set working directory
 
 # -- reach Corinna's fish data set
