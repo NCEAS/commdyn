@@ -29,6 +29,10 @@
 # Search for PVC02
 # Download data (maximum date ranges)
 
+library(reshape2)
+library(plyr)
+library(ggplot2)
+
 konza <- read.csv("~/Downloads/PVC021.dat", na.strings=0)
 
 
@@ -66,7 +70,7 @@ column.definitions <- c("Data code (factor), same for all data in this dataset",
 watershed_001d = subset(konza, WATERSHED=="001d")
 watershed_001d_ft <- subset(watershed_001d, SOILTYPE %in% c("f", "t"))
 data.cols <- grep("[A-D][1-9]", colnames(konza))
-species.dates <- which(colnames(dat) %in% c("RECYEAR", "RECMONTH", "RECDAY", "SOILTYPE", "AB_GENUS", "AB_SPECIES", "AB_VARIETY"))
+species.dates <- which(colnames(konza) %in% c("RECYEAR", "RECMONTH", "RECDAY", "SOILTYPE", "AB_GENUS", "AB_SPECIES", "AB_VARIETY"))
 watershed_001d_ft <- watershed_001d_ft[c(data.cols, species.dates)]
 dat <- watershed_001d_ft 
 
@@ -98,11 +102,11 @@ c("0" = 0,
 
 data.cols <- grep("[A-D][1-9]", colnames(dat))
 
-sapply(dat, function(x){
+M = data.frame(sapply(dat, function(x){
   x <- as.character(x)
   x[x==""] <- "0"
   abundance_codes[x]
-}
+}))
 
 
 
