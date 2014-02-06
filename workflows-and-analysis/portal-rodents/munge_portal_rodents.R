@@ -1,3 +1,5 @@
+# TODO: Look into better ways of dealing with major errors (negative periods)?
+
 library(reshape2)
 library(plyr)
 
@@ -18,17 +20,68 @@ dat = read.csv(
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
 
-# Blanks are the *real* missing values -- representing empty plots.  Remove these values (irrelevant to analysis)
-dat = dat[dat$species != "",]
 
-dat$time.step = paste(dat$yr, dat$mo, dat$dy, sep = "-")
+# Manage based on note1 ---------------------------------------------------
+
+# 2: trapped but no animals present (treat as Empty)
+dat$Empty = dat$note1 == 2
+
+# 4: plot not trapped (remove)
+dat = dat[which(dat$note1 != 4), ]
+
+# 13: non-target animal (remove)
+dat = dat[which(dat$note1 != 13), ]
+
+# Erroneous data has negative sampling period and is just removed for now
+dat = dat[dat$period > 0, ]
+
+# Record 54411 has a missing species but was not empty.  Remove it.
+dat = dat[dat$Record_ID != 54411, ]
+
+
+# Assert that rows with blank species and "Empty" observations are co-extensive
+stopifnot(
+  all.equal(
+    which(dat$species == ""),
+    which(dat$Empty)
+  )
+)
+
+# Rename "" to "blank"
+dat$species[dat$species == ""] = "blank"
+
+# Find (supposedly) Empty plots that occur more than once
+# (possibly indicating non-emptiness)
+sampling.ids = apply(
+  dat, 
+  1, 
+  function(x){paste(x["date"],  x["plot"], sep = "_")}
+)
+duplicates = sapply(
+  unique(sampling.ids[dat$Empty]), 
+  function(x){sum(sampling.ids == x) > 1}
+)
+
+# Record 31750 is a duplicate of 31749
+dat = dat[dat$Record_ID != 31749, ]
+
+# Dates -------------------------------------------------------------------
+
+dat$date = paste(dat$yr, dat$mo, dat$dy, sep = "-")
+
+# There is not April 31 or September 21
+dat$date = gsub("4-31-00", "5-1-00", dat$date)
+dat$date = gsub("9-31-00", "10-1-00", dat$date)
 
 wide.data = dcast(
   data = dat, 
-  formula = time.step + plot ~ species, 
+  formula = period + date + plot ~ species, 
   fill = 0,
   fun.aggregate = length
 )
+
+# "blank" isn't a real species, it's just a placeholder
+wide.data$blank = NULL
 
 write.csv(
   wide.data, 
