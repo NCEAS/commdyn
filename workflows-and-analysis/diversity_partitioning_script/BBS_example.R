@@ -1,10 +1,10 @@
-# -- Eric's script to calculate diversity metrics for Corinna's fish data set
+# -- Eric's script to calculate diversity metrics for BBS data set
 
-# -- reach Corinna's fish data set
-dat.obs<-read.csv('workflows-and-analysis/diversity_partitioning_script/NTLfishmatrix.csv')
+# -- example with BBS data set
+dat.obs<-read.csv('workflows-and-analysis/BBS/BBS_wide.csv',row.names=1)
 
 # -- make a grouping data frame and a species table
-dat.groups<-dat.obs[,c("lakeid","year4")]
+dat.groups<-dat.obs[,c("Year","Route")]
 spp.list<-names(dat.obs)[c(-1,-2)]
 dat.spp<-dat.obs[,spp.list]
 
@@ -17,7 +17,7 @@ source('workflows-and-analysis/diversity_partitioning_script/fn.divpart.groups.R
 # -- call function to calculate a diversity metric (alpha, beta, or gamma) for each group
 dat.results<-fn.divpart.groups(
   spp.table=dat.spp, #site by species matrix
-  grouping.list=list(year=dat.groups$year4), #list of grouping vectors
+  grouping.list=list(year=dat.groups$Year), #list of grouping vectors
   div.metric.type="beta",
   q.order=0)
 
@@ -33,7 +33,7 @@ plot(y.diversity~x.year,type="l")
 # -- call function to calculate a diversity metric (alpha, beta, or gamma) for each group
 dat.results<-fn.divpart.groups(
   spp.table=dat.spp, #site by species matrix
-  grouping.list=list(year=dat.groups$year4), #list of grouping vectors
+  grouping.list=list(year=dat.groups$Year), #list of grouping vectors
   div.metric.type="alpha",
   q.order=2)
 
@@ -49,8 +49,8 @@ plot(y.diversity~x.year,type="l")
 # -- call function to calculate a diversity metric (alpha, beta, or gamma) for each group
 dat.results<-fn.divpart.groups(
   spp.table=dat.spp, #site by species matrix
-  grouping.list=list(year=dat.groups$year4,
-                     site=dat.groups$lakeid), #list of grouping vectors
+  grouping.list=list(year=dat.groups$Year,
+                     site=dat.groups$Route), #list of grouping vectors
   div.metric.type="alpha",
   q.order=0)
 
