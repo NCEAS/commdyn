@@ -32,6 +32,9 @@
 # Search for PVC02
 # Download data (maximum date ranges)
 
+arth <- read.csv("~/Dropbox/conferences/NCEAS_workshop_feb2014/lter_arthropods.csv")
+
+
 konza <- read.csv("~/Downloads/PVC021.dat", na.strings=0)
 
 
