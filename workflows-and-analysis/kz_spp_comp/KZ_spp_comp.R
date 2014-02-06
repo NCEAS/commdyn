@@ -2,15 +2,20 @@ install.packages("vegan")
 install.packages("plotrix")
 install.packages("car")
 install.packages("gdata")
+install.packages("dataone")
 
 library(vegan)
 library(MASS)
 
+source("utility-functions.R")
 
 ###RaMPs#############################################
 #####################################################
 ###call file from your machine 
-spp_matrix <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+#original_data <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+original_data <- download_from_dataone("commdyn.4.1")
+
+spp_matrix <- original_data
 head(spp_matrix)
 ncol(spp_matrix)
 nrow(spp_matrix)
@@ -240,7 +245,8 @@ betad
 ###all years#####################################################
 #################################################################
 ###post rare removed
-spp.comp.rr <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+#spp.comp.rr <- read.csv("RaMP_spp_comp_matrix_FINAL.csv", header = TRUE, strip.white = TRUE)
+spp.comp.rr <- original_data
 head(spp.comp.rr)
 
 window.rr <- spp.comp.rr[,2:39]
