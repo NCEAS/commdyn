@@ -17,8 +17,11 @@ dat = read.csv(
   as.is = TRUE
 )
 
+# Remove blank rows
+dat = dat[!(is.na(dat$mo) | is.na(dat$plot)), ]
+
 # Create a new note1 code for entries with no note
-dat$note1[dat$note1] = 0
+dat$note1[is.na(dat$note1)] = 0
 
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
@@ -40,6 +43,10 @@ dat = dat[dat$period > 0, ]
 
 # Record 54411 has a missing species but was not empty.  Remove it.
 dat = dat[dat$Record_ID != 54411, ]
+
+# A few escapees were not identified to species and should be listed as 
+# unknown rodent (UR)
+dat[dat$species == "" & !dat$Empty & dat$note5 == "E", "species"] = "UR"
 
 
 # Assert that rows with blank species and "Empty" observations are co-extensive
