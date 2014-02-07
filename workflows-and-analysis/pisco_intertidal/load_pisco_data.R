@@ -9,7 +9,7 @@ results <- d1SolrQuery(cli, list(q="id:*pisco_intertidal.50.6 -obsoletedBy:*",fl
 sr <- xmlParse(results)
 sr
 
-# A function that downloads the 
+# A function that downloads the data for a pid and assumes its parseable into a data.frame
 getDataFrame <- function(pkg, pid) {
     obj1 <- getMember(pkg, pid)
     d1 <- asDataFrame(obj1)
@@ -31,3 +31,15 @@ obj5 <- getMember(pkg, "doi:10.6085/AA/pisco_intertidal.50.6")
 getFormatId(obj5)
 metadata <- xmlParse(getData(obj5))
 metadata
+
+#obj <- eml_read("doi:10.6085/AA/pisco_intertidal.50.6")
+
+# Aggregate the species counts by site, year, plot, and species
+# Note: it's not clear the PISCO concept of transect will correspond to our use of 'plot'
+# Check the methods docs to verify: http://cbsurveys.ucsc.edu/sampling/images/dataprotocols.pdf
+library(data.table)
+d2_t = data.table(d2)
+d2_t$dummy <- 1
+pisco_point_counts <- d2_t[,list(cnt = sum(dummy)), by = c('site_code,year,transect,class_code')]
+setnames(pisco_point_counts, c("site", "year", "plot", "species", "abundance"))
+pisco_point_counts$abundancemetric <- "count"
