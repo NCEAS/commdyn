@@ -9,7 +9,7 @@ library(reshape2)
 # Search for PVC02
 # Download data (maximum date ranges)
 
-konza <- read.csv("~/Downloads/PVC021.dat", na.strings=0, stringsAsFactors = FALSE)
+konza <- read.csv("PVC021.dat", na.strings=0, stringsAsFactors = FALSE)
 
 # Subset 
 konza <- subset(konza, WATERSHED=="001d")
@@ -69,6 +69,11 @@ dat[data.cols] <- M # stick the transformed columns back
 A <- melt(dat, id = names(dat)[-data.cols])
 
 B <- dcast(A, ... ~ scientific.name, value.var="value", fill = 0, fun.aggregate=max)
-dat.obs <- B
 
+
+dat.obs <- aggregate_by_time(B,
+                  unit = "year",
+                  fun.aggregate = max,
+                  species.columns = which(sapply(B, is, "numeric")), 
+                  date.column = which(sapply(B, is, "Date")))
 
