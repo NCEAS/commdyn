@@ -19,7 +19,7 @@ dat.results<-fn.divpart.groups(
 
 # -- plot diversity metric by group (year)
 x.year<-as.numeric(as.character(dat.results$group_year4))
-y.diversity<-dat.results$beta.std
+y.diversity<-dat.results$div.metric
 par(las=2)
 plot(y.diversity~x.year,type="l")
 
