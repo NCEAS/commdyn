@@ -80,8 +80,9 @@ dat = dat[dat$Record_ID != 31749, ]
 dat$date = paste(dat$yr, dat$mo, dat$dy, sep = "-")
 
 # There is not April 31 or September 21
-dat$date = gsub("4-31-00", "5-1-00", dat$date)
-dat$date = gsub("9-31-00", "10-1-00", dat$date)
+dat$date = gsub("2000-4-31", "2000-5-1", dat$date)
+dat$date = gsub("2000-9-31", "2000-10-1", dat$date)
+
 
 wide.data = dcast(
   data = dat, 
