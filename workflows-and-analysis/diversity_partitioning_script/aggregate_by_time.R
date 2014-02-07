@@ -23,6 +23,8 @@ aggregate_by_time <- function(df,
     factors,
     function(x){
       ap <- apply(x[species.columns], 2, fun.aggregate)
-      cbind(x[1, -species.columns, drop = FALSE], matrix(ap, nrow=1))
+      tmp <- matrix(ap, nrow = 1)
+      colnames(tmp) <- names(ap)
+      cbind(x[1, -species.columns, drop = FALSE], tmp)
     })
 }
