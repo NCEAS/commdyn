@@ -1,0 +1,18 @@
+
+
+```{r}
+source('workflows-and-analysis/diversity_partitioning_script/fn.divpart.groups.v2.R')
+dat.results<-fn.divpart.groups(
+  data.table=dat.obs, #site by species matrix
+  group.names="date_block", #list of grouping vectors
+  var.names.to.exclude=c("SOILTYPE", "date", "variable"),
+  div.metric.type="alpha",
+  q.order=0)
+```
+
+
+
+```{r}
+require(ggplot2)
+ggplot(dat.results) + geom_line(aes(x = as.Date(as.character(group_date_block)), y = div.metric)) + ylim(0,25)
+```

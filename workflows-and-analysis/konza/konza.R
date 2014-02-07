@@ -9,7 +9,7 @@ library(reshape2)
 # Search for PVC02
 # Download data (maximum date ranges)
 
-konza <- read.csv("~/Downloads/PVC021.dat", na.strings=0, stringsAsFactors = FALSE)
+konza <- read.csv("PVC021.dat", na.strings=0, stringsAsFactors = FALSE)
 
 # Subset 
 konza <- subset(konza, WATERSHED=="001d")
@@ -69,53 +69,11 @@ dat[data.cols] <- M # stick the transformed columns back
 A <- melt(dat, id = names(dat)[-data.cols])
 
 B <- dcast(A, ... ~ scientific.name, value.var="value", fill = 0, fun.aggregate=max)
-dat.obs <- B
 
 
-library(lubridate)
+dat.obs <- aggregate_by_time(B,
+                  unit = "year",
+                  fun.aggregate = max,
+                  species.columns = which(sapply(B, is, "numeric")), 
+                  date.column = which(sapply(B, is, "Date")))
 
-aggregate_by_time <- function(df,
-                              unit = "year",
-                              fun.aggregate = sum,
-                              date.column = which(sapply(df, is, "Date")),
-                              value.columns) # = which(sapply(df, is, "numeric")))
-{
-  
-  df$date_block <- floor_date(df[[date.column]], unit)
-  factors <- names(df)[-c(value.columns, date.column)]
-  
-  out <- ddply(
-    df, 
-    factors,
-    function(x){
-      ap <- apply(x[value.columns], 2, fun.aggregate)
-      do.call(
-        cbind, 
-        c(
-          x[1, -value.columns, drop = FALSE], 
-          as.list(ap), 
-          stringsAsFactors =FALSE
-        )
-        )
-      )
-    })
-}
-
-
-
-
-sp_matrix_over_interval <- function(
-  matrix, 
-  unit = "year",
-  fun.aggregate = "sum",
-  date.column = which(sapply(matrix, is, "Date")),
-  value.columns = which(sapply(matrix, is, "numeric")){
-    long <- melt(matrix, ids = names(matrix)[-value.columns])
-    long[date.column] <- floor_date(long[date.column], unit)
-    dcast(long, 
-          ... ~ names(value.columns),
-          value.var = "value", fill = 0, fun.aggregate=fun.aggregate)
-  }
-  
-  dat <- sp_matrix_over_interval(B, "year", "max")
-  
