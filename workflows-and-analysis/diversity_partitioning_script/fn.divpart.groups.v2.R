@@ -50,9 +50,9 @@ fn.divpart.groups<-function(
                        INDICES=grouping.vect,
                        FUN=nrow))
   if(div.metric.type=="beta"){
-    div.metric.std<-div.metric.val/N.obs
+    rel.beta.rate<-(div.metric.val-1)/(N.obs-1) #eq 12a from Chao et al. 2012
   }else{
-    div.metric.std=NA
+    rel.beta.rate=NA
   }
   
   # return a data table
@@ -61,6 +61,6 @@ fn.divpart.groups<-function(
                     q.order=q.order,
                     div.metric=div.metric.val,
                     N.obs=N.obs,
-                    beta.std=div.metric.std,
+                    rel.beta.rate=rel.beta.rate,
                     row.names=NULL))
 }

@@ -10,7 +10,7 @@ library(plyr)
 #
 # Metadata available from http://esapubs.org/archive/ecol/E090/118/metadata.htm
 #
-# Data from 2002 to 2013 added by Erica Christensen
+# Data from 2002 to 2013 added by Erica Christensen (erica.christensen@weecology.org)
 
 dat = read.csv(
   "workflows-and-analysis/portal-rodents/Portal_rodents_19772013.csv", 
@@ -25,6 +25,9 @@ dat$note1[is.na(dat$note1)] = 0
 
 # There's a real species called NA, so make sure that the NAs are actually "NA"
 dat$species[is.na(dat$species)] = "NA"
+
+# Get rid of "all rodents removed" plots
+dat = dat[!dat$plot %in% c(5,7,10,16,23,24),]
 
 
 # Manage based on note1 ---------------------------------------------------
