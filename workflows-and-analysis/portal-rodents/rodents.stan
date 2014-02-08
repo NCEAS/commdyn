@@ -3,6 +3,7 @@ data{
   real<lower=0> t[N];
   int<lower=0> count[N];
   int<lower=1>N_periods;
+  int<lower=1>N_days;
   int<lower=1>N_plots;
   
   //fixed effects
@@ -11,6 +12,7 @@ data{
   // random effects:
   int<lower=1> period[N];
   int<lower=1> plot[N];
+  int<lower=1> day[N];
 }
 
 parameters {
@@ -27,17 +29,18 @@ parameters {
   // random effects
   real alpha_plot[N_plots];
   real alpha_period[N_periods];  
+  real alpha_day[N_days];
   real<lower=0>sigma_plot;
   real<lower=0>sigma_period;
+  real<lower=0>sigma_day;
 }
 
 model {
   real p[N];
   
   // priors
-  beta_t ~ normal(0, 1);
-  beta_decadal_period ~ exponential(1);
-  //decadal_period ~ normal(10, 10);
+  beta_t ~ normal(0, 10);
+  beta_decadal_period ~ exponential(.1);
 
   //Annual period is defined at exactly 1
   beta_annual_period ~ exponential(1);
@@ -45,6 +48,7 @@ model {
   // random effects
   alpha_plot ~ normal(0, sigma_plot);
   alpha_period ~ normal(0, sigma_period);
+  alpha_day ~ normal(0, sigma_day);
   
   for(i in 1:N){
     p[i] <- inv_logit(
@@ -54,6 +58,7 @@ model {
       beta_annual_period * sin(2/1 * pi() * t[i] + annual_offset) +
       beta_decadal_period * sin(2/decadal_period * pi() * t[i] + decadal_offset) +
       alpha_plot[plot[i]] + 
+      alpha_day[day[i]] + 
       alpha_period[period[i]]
     );
   }
