@@ -54,6 +54,12 @@ plot(
   xlab = "Years since start"
 )
 lines(
+  sapply(split(t, rodents$period), mean),
+  sapply(split(count, rodents$period), mean), 
+  col = "blue",
+  lwd = 3
+)
+lines(
   t,
   45 * plogis(x),  
   col = 2,
@@ -67,9 +73,9 @@ lines(
 )
 legend(
   "topleft", 
-  legend = c("Baseline", "Rodent exclosures"), 
-  col = c("red", "slateblue"),
-  lwd = 4
+  legend = c("Observed mean", "Model: Baseline", "Model: Rodent exclosures"), 
+  col = c("blue", "red", "slateblue"),
+  lwd = c(3, 4, 4)
 )
 
 
