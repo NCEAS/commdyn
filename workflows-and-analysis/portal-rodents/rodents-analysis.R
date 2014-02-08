@@ -46,7 +46,13 @@ x = with(
     beta_decadal_period * sin(2/decadal_period * pi * t + decadal_offset)
 )
 
-plot(count ~ t, cex = .5, pch = 16)
+plot(
+  count ~ t, 
+  cex = .5, 
+  pch = 16,
+  ylab = "Plot-level abundance",
+  xlab = "Years since start"
+)
 lines(
   t,
   45 * plogis(x),  
@@ -59,7 +65,19 @@ lines(
   col = "slateblue",
   lwd = 8
 )
+legend(
+  "topleft", 
+  legend = c("Baseline", "Rodent exclosures"), 
+  col = c("red", "slateblue"),
+  lwd = 4
+)
 
 
-plot(apply(ex$alpha_period, 2, median), lwd = 2, type = "l")
+plot(
+  apply(ex$alpha_period, 2, median), 
+  lwd = 2, 
+  type = "l",
+  ylab = "Period-level anomaly (logit scale)",
+  xlab = "Period"
+)
 abline(h = 0)
