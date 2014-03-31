@@ -14,12 +14,12 @@ dat.results<-fn.divpart.groups(
   data.table=dat.obs, #site by species matrix
   group.names="year4", #list of grouping vectors
   var.names.to.exclude="lakeid",
-  div.metric.type="alpha",
+  div.metric.type="beta",
   q.order=0)
 
 # -- plot diversity metric by group (year)
 x.year<-as.numeric(as.character(dat.results$group_year4))
-y.diversity<-dat.results$div.metric
+y.diversity<-dat.results$rel.beta.rate
 par(las=2)
 plot(y.diversity~x.year,type="l")
 
