@@ -7,3 +7,4 @@ This repository contains software related to the Community Dynamics project, a c
 
 * License: [Apache License, Version 2.02](http://www.apache.org/licenses/LICENSE-2.0.html)
 * [Issues](https://projects.ecoinformatics.org/ecoinfo/projects/commdyn/issues): Bug reports, feature requests, and development discussion.
+
