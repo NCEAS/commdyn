@@ -1,30 +1,22 @@
 ---
-title: "codyn: an R package of community dynamic metrics"
-author: "Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones, Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins"
-date: "`r Sys.Date()`"
+title: 'codyn: an R package of community dynamic metrics'
+author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
+  Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
+date: '`r Sys.Date()`'
+output: word_document
 bibliography: biblio.bib
-output: html_document
 ---
 
-##Overview
-As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. The package `codyn` includes recently developed metrics of ecological community dynamics. Functions in `codyn` implement metrics that are explicitly temporal, and include the option to calculate them over multiple replicates. Functions fall into two categories: temporal diversity indices and community stability metrics. 
+##Introduction
+As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to vastly expand our understanding of ecology. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of related but temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will underpin many new advances in ecology.
+
+However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics have not yet been published as functions in R. Although R is becoming the programming language of choice for most ecologists, the majority of ecologists rely on published instead of self-written functions. The primary R package for vegetation analyses, vegan, includes many diversity indices and ordination techniques but does not include temporal metrics of community patterns. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall their general use and application. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their pros and cons.
+
+Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with an example for the Konza Prairie Long-Term Ecological Research Site, Manhattan KS.
 
 ##Temporal Diversity Indices
-Many traditional measure of community structure represent a ‘snapshot in time’ whereas ecological communities are dynamic and many are experiencing directional change with time. The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include:
+The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. 
 
-- `turnover` calculates total turnover as well as the proportion of species that either appear or disappear between timepoints.
+### `turnover`
 
-- `mean_rank_shift` quantifies relative changes in species rank abundances by taking the sum difference of species ranks in consecutive time points. This metric goes hand-in-hand with "rank clocks," a useful visualization tool for shifts in species ranks. 
-
-- `rate_change` analyzes differences in species composition between samples at increasing time lags. It reflects the rate of directional change in community composition.
-
-- `rate_change_interval` produces a data frame containing differences in species composition between samples at increasing time intervals.
-
-##Community Stability Metrics
-Ecologists have long debated the relationship between species diversity and stability. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance and asynchrony:
-
-- `variance_ratio` characterizes species covariance [@schluter1984; @houlahan2007], and includes a null-modeling approach to test significance [@hallett2014]. Null modeling is built-in to the `variance_ratio` function. Two additional functions, `temporal_torus_translation` and `temporal_torus_translation_CI`, allow this method to be generalized to other test statistics.
-
-- `synchrony` has two options. The first compares the variance of the aggregated community with the variance of individual components [@loreau2008]. The second compares the average correlation of each individual species with the rest of the aggregated community [@gross2014].
-
-##Citations
+##Literature cited
