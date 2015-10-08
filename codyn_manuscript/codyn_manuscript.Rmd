@@ -8,6 +8,13 @@ bibliography: biblio.bib
 ---
 
 ##Abstract
+1. New analytical tools applied to long-term data demonstrate that ecological communities are highly dynamic over time. We developed an R package, codyn, to help ecologists easily implement these metrics and gain broader insights into community dynamics. 
+
+2. The codyn package provides temporal diversity indices and community stability metrics. All functions are designed to be easily implemented over multiple replicates.
+
+3. Temporal diversity indices include species turnover, mean rank shifts and rate of community change over time. Community stability metrics calculate overall stability and patterns of species covariance and synchrony over time, and include a novel null-modeling method to test significance. 
+
+4. Finally, codyn contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
 
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to vastly expand our understanding of ecology. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of related but temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will underpin many new advances in ecology.
