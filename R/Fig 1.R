@@ -58,11 +58,26 @@ rad.unb <- apply(unb, 1, function(x) sort(
   x[x>0]/max(x),
   decreasing = T))
 
-plot(1:nrow(ann), seq(0, 1, length.out = nrow(ann)),
+plot(1:nrow(ann), seq(0.00001, 1, length.out = nrow(ann)),
      ylab = "Relative abundance",
      xlab = "Year",
      type = "n",
      las = 1,
+     log = "y"
      )
 
-rad.ann
+points(x = (1:length(rad.ann$`1984`))/18,
+       y = rad.ann$`1984`, 
+       type = "l"
+       )
+
+# plot(x = (1:length(rad.ann$`1984`))/18,
+#        y = rad.ann$`1984`, log = "y", type = "b")
+
+lapply(rad.ann,
+       function(x)
+         points(x = (1:length(rad.ann$`1984`))/18,
+                y = rad.ann$`1984`, 
+                type = "l"
+         )
+       
