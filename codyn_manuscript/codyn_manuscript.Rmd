@@ -14,9 +14,29 @@ However, there are several impediments to the broad adoption of temporal analyse
 
 Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with an example for the Konza Prairie Long-Term Ecological Research Site, Manhattan KS.
 
-##Temporal Diversity Indices
-The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. 
+##Temporal diversity indices
+The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include species turnover (`turnover`), mean shifts in rank abundance (`mean_rank_shift`) [@Collins2008] and rate of directional change in community composition over time (`rate_change`). The associated vignette also includes a demonstration of 
 
-### `turnover`
+## Species turnover
+Species turnover represents a temporal analog to species richness. It is described by the total turnover in species (appearances and disappearances) as well as the proportion of species that either appear or disappear between time points [@Collins2008; @cleland2013]. 
+
+The function `turnover` calculates three metrics of species turnover: total turnover, appearances, and disappearances.
+
+The default metric `total` refers to total turnover, which calculates the proportion of species that differ between timepoints as:
+
+$$ Total\; turnover = \frac{Species\; gained\; +\; Species\; lost}{Total\; species\; observed\; in\; both\; time points} $$
+
+The metric was introduced by MacArthur and Wilson [-@MacArthur1963] and modified by Diamond [-@diamond1969] to be expressed as a proportion in order to compare turnover between sites that differ in species richness. The `turnover` function also includes the option to parse the relative contribution of species appearances and disappearances contribution. For example, a time point in which many species appear may reflect a different ecological story than a time point in which many species drop from the system, but the total turnover in both scenarios may be similar. 
+
+### Mean rank shifts
+The `mean_rank_shift` function describes relative changes in species rank abundances, which indicate the degree of species reording between two time points [@Collins2008]. This metric is calculated as:
+
+$$ MRS = {\sum_{i=1}^{N} (|R_i,t+1 - R_i,t|})/N $$
+
+where $N$ is the number of species in common in both time points, $t$ is the time point, $R_i,t$ is the relative rank of species $i$ in time $t$.
+
+## Rate of community change
+The `rate_change` function assesses the rate and pattern of variability within a community, which indicates  whether species reordering over time is resulting in directional change. This function calculates differences in species composition between samples at increasing time intervals.  Differences in species composition are characterized by Euclidean distances, which are calculated on pair-wise communities across the entire time series. For example, a data set with 6 time intervals will have distance values for five one-interval time lags (e.g., time 1 vs time 2, time 2 vs time 3 ...), 4 two-interval time lags (e.g., time 1 vs time 3, time 2 vs time 4 ...) and so forth. These distance values are regressed against the time lag interval. The slope of the regression line is an indication of the rate and direction of compositional change in the community [@collins2000].
+
 
 ##Literature cited
