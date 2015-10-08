@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 commdyn.Rproj
+codyn_manuscript/*.html
+codyn_manuscript/*.docx
