@@ -3,6 +3,8 @@ require(plotrix)
 require(calibrate)
 require(vegan)
 require(car)
+library(reshape)
+library(ggplot2)
 
 
 SEV004 <- read.csv("workflows-and-analysis/SEV_vegetation/SEV004_raw.csv", header = TRUE, strip.white = TRUE)
@@ -151,8 +153,8 @@ ablineclip(lm.veg, x1=0, x2=25, type="l", lty= 1, lwd=3.5, col="#000000")
 ###Rank plots
 
 # Reshape the data in to long format
-veg.rank <- melt(veg.spp, value.name = "abundance", id.vars = "year", variable.name = "species")
-
+veg.rank <- melt(veg.spp, id.vars = "year", variable_name = "species")
+names(veg.rank)[3] = "abundance"
 # graph: linear version 
 ggplot(veg.rank, aes(year,log(abundance),color=species)) + geom_line()
 
