@@ -3,18 +3,24 @@ title: 'codyn: an R package of community dynamics metrics'
 author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
   Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
 date: '`r Sys.Date()`'
-output: word_document
+output: pdf_document
 bibliography: biblio.bib
 ---
 
-##Abstract
-1. New analytical tools applied to long-term data demonstrate that ecological communities are highly dynamic over time. We developed an R package, codyn, to help ecologists easily implement these metrics and gain broader insights into community dynamics. 
+```{r echo = F}
+# setting up R stuff
+library(knitr)
+options(digits = 3)
+```
 
-2. The codyn package provides temporal diversity indices and community stability metrics. All functions are designed to be easily implemented over multiple replicates.
+##Abstract
+1. New analytical tools applied to long-term data demonstrate that ecological communities are highly dynamic over time. We developed an R package, `codyn`, to help ecologists easily implement these metrics and gain broader insights into community dynamics. 
+
+2. The `codyn` package provides temporal diversity indices and community stability metrics. All functions are designed to be easily implemented over multiple replicates.
 
 3. Temporal diversity indices include species turnover, mean rank shifts and rate of community change over time. Community stability metrics calculate overall stability and patterns of species covariance and synchrony over time, and include a novel null-modeling method to test significance. 
 
-4. Finally, codyn contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
+4. Finally, `codyn` contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
 
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to vastly expand our understanding of ecology. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of related but temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will underpin many new advances in ecology.
@@ -86,5 +92,54 @@ $$ Synchrony = (1/N){{\sum_{i}Corr(x_i, \sum_{i\neq{j}}{x_j})}}$$
 This measure of synchrony is standardized from -1 (perfect asynchrony) to 1 (perfect synchrony) and is centered at 0 when species fluctuate independently. It can be specified in the `synchrony` function. A virtue of this metric is it not sensitive to richness and has the potential for null-model significance testing. It may under-perform on short time series because it is based on correlation, and care should be taken when applying it to communities that contain very stable species (i.e., whose abundances do not change throughout the time series).
 
 Qualititively, the degree to which the synchrony metrics calculated by `Loreau` versus `Gross` will differ depends on the abundance distributions of the species in a community. The `Loreau` method and the variance ratio are both based on variances, and are therefore more heavily influenced by abundant species. In contrast,  the `Gross` method is based on correlation and consequently weights species equally.
+
+### Worked example: Konza prairie long-term dynamics data set.
+
+To demonstrate the utility of the `codyn` tools, we show how to calculate spatial and temporal diversity indices using data from [@Collins08]. These data represent a long-term monitoring of grassland plant diversity in annually burned and unburned plots.
+
+First, looking at stability. The `community_stability` function calculates $1/CV$, across time points for each replicate. The annually burned plot exhibits higher stability of across time, while the unburned plot is undergoing succession. 
+```{r}
+library(codyn)
+data(collins08)
+
+KNZ_stability <- community_stability(collins08, 
+                                   time.var = "year", 
+                                   abundance.var = "abundance", 
+                                   replicate.var = "replicate")
+kable(KNZ_stability)
+```
+
+Variance ratio
+```{r results='asis'}
+KNZ_variance_ratio <- variance_ratio(collins08, 
+                                   abundance.var = "abundance", 
+                                   bootnumber = 10, 
+                                   replicate.var = "replicate")
+kable(KNZ_variance_ratio)
+```
+
+Synchrony
+###Comparison between "Loreau" and "Gross"
+Qualititively, the degree to which the synchrony metrics calculated by `Loreau` versus `Gross` will differ depends on the abundance distributions of the species in a community. The `Loreau` method and the variance ratio are both based on variances, and are therefore more heavily influenced by abundant species. In contrast,  the `Gross` method is based on correlation and consequently weights species equally.
+
+```{r results='asis'}
+KNZ_synchrony_Loreau <- synchrony(df = knz_001d, 
+                         time.var = "year", 
+                         species.var = "species", 
+                         abundance.var = "abundance", 
+                         replicate.var = "subplot")
+kable(head(KNZ_synchrony_Loreau))
+```
+
+```{r results='asis'}
+KNZ_synchrony_Gross <- synchrony(df = knz_001d, 
+                           time.var = "year", 
+                           species.var = "species",  
+                           abundance.var = "abundance", 
+                           metric = "Gross", 
+                           replicate.var = "subplot")
+```
+                  
+Lauren to add: turnover, rank clocks, mean rank shifts, rate_change
 
 ##Literature cited
