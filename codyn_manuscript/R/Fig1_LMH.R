@@ -14,7 +14,7 @@ rich.dat <-collins08 %>%
   tbl_df() %>%
   mutate(replicate2="Annually burned", replicate2=ifelse(replicate=="unburned", "Unburned", replicate2))
 
-rich.graph <- ggplot(rich.dat, aes(x=year, y=richness)) + geom_line(size = 2) + theme_bw() + facet_wrap(~replicate2) 
+rich.graph <- ggplot(rich.dat, aes(x=year, y=richness)) + geom_line(size = 1.5) + theme_bw() + facet_wrap(~replicate2) 
 
 
 ### Mean rank abundance ###
@@ -39,7 +39,7 @@ KNZ_allturnover<-rbind(KNZ_turnover, KNZ_appearance, KNZ_disappearance)
 
 #Make the graph
 turn.graph <- ggplot(KNZ_allturnover, aes(x=year, y=turnover, color=metric)) + 
-  geom_line(size = 2) + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
+  geom_line(size = 1.5) + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
 
 ### Mean rank shifts ###
 
@@ -51,7 +51,7 @@ KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 
 # Plot it
 rankshift.graph <- ggplot(KNZ_rankshift, aes(year, MRS)) + 
-  geom_line(size= 2) + theme_bw() + facet_wrap(~replicate)
+  geom_line(size= 1.5) + theme_bw() + facet_wrap(~replicate)
 
 
 ### Rate change ###
@@ -62,7 +62,7 @@ comm.res <- rate_change_interval(collins08,   time.var= "year",
 
 ### Make the graph ###
 rate.graph<-ggplot(comm.res, aes(interval, distance, group = replicate)) + facet_wrap(~replicate) + 
-  geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 2)
+  geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 1.5)
 
 
 ### Put it all together!! ###
