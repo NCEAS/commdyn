@@ -124,7 +124,7 @@ ann <- codyn:::transpose_community(collins08[collins08$replicate=="annually burn
                                    abun= "abundance")
 ranann <- data.frame(abun = sort(apply(ann, 2, mean)/max(ann), decreasing = T), rank = 1:ncol(ann)); ranann$sp = rownames(ranann)
 ranunb <- data.frame(abun = sort(apply(unb, 2, mean)/max(unb), decreasing = T), rank = 1:ncol(unb));ranunb$sp = rownames(ranunb)
-ran.all <- merge(rad.ann, rad.unb, by = "sp", all = T)
+ran.all <- merge(ranunb, ranann, by = "sp", all = T)
 ran.all <- data.frame(spec = rep(ran.all$sp, 2), 
                       abun = c(ran.all[,2], ran.all[,4]),
                       rank = c(ran.all[,3], ran.all[,5]),
