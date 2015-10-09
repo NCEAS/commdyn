@@ -92,11 +92,21 @@ rate.graph<-ggplot(comm.res, aes(interval, distance, group = replicate)) + facet
   dev.off()
 
 
-
-##Rank clocks
+### Rank clocks ###
 aggdat <- aggregate(abundance ~ species * year * replicate,  data = subset(collins08, species == "andrgera" |
-                                                                             species == "andrscop" | species == "poaprat"| species == "sorgnuta"), FUN = mean)
+              species == "andrscop" | species == "poaprat"| species == "sorgnuta"), FUN = mean)
 
+aggdat$replicate2 <- "Annually burned"
+aggdat$replicate2 <- ifelse(aggdat$replicate == "unburned", "Unburned", aggdat$replicate2)
+
+## make the graphs
 rankclock.graph <- ggplot(aggdat, aes(year, abundance, color = species)) + 
-  geom_line(size = 2) + coord_polar() + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
+  geom_line(size = 2) + coord_polar() + theme_bw() + facet_wrap(~replicate2) + 
+  labs(x="Year", y="Abundance", color="Species") +
+  theme(text= element_text(size = 14), strip.text.x = element_text(size = 14), strip.background = element_blank()) + theme( legend.position="bottom")
 
+
+
+tiff("rank_clock.tiff", width=400, height=300)
+rankclock.graph
+dev.off()
