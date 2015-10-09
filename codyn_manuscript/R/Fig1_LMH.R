@@ -44,7 +44,7 @@ turn.graph <- ggplot(KNZ_allturnover, aes(x=year, y=turnover, color=metric)) +
 ### Mean rank shifts ###
 
 #Run the function
-KNZ_rankshift <- mean_rank_shift(df=subset(collins08, species != "andrgera"),  abundance.var = "abundance", replicate.var = "replicate")
+KNZ_rankshift <- mean_rank_shift(df=collins08,  abundance.var = "abundance", replicate.var = "replicate")
 
 #Select the final time point from the returned time.var_pair
 KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
@@ -57,15 +57,15 @@ rankshift.graph <- ggplot(KNZ_rankshift, aes(year, MRS)) +
 ### Rate change ###
 
 #Run the function
-comm.res <- rate_change_interval(subset(collins08, species != "andrgera"),   time.var= "year",    
+comm.res <- rate_change_interval(collins08,   time.var= "year",    
                                  species.var= "species",  abundance.var= "abundance", replicate.var = "replicate")
 
 ### Make the graph ###
 rate.graph<-ggplot(comm.res, aes(interval, distance, group = replicate)) + facet_wrap(~replicate) + 
   geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 2)
 
-  grid.arrange(turn.graph, rankclock.graph, rankshift.graph, rate.graph)
-  
+
+### Put it all together!! ###
   tiff("temporal_diversity_graph.tiff", width=400, height=600)
           grid.arrange(rich.graph +
                  labs(x="Year", y=expression(paste("Richness (no / 10", m^2,")"))) +
