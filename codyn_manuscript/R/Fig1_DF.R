@@ -1,6 +1,6 @@
 # Figure 1 of codyn methods paper, top panel only
 
-# Goal: make a figure which compares non-temporal measures of diversity (richness, rank abundance) with temporal measures (tunoer, rank clock, MRS, rate change).
+# Goal: make a figure which compares non-temporal measures of diversity (richness, rank abundance) with temporal measures (turnover, rank clock, MRS, rate change).
 
 # use Konza data from Collins et al. 2008 Ecology as the example data set.
 library(vegan)

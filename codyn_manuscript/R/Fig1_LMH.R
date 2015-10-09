@@ -14,7 +14,7 @@ rich.dat <-collins08 %>%
   tbl_df() %>%
   mutate(replicate2="Annually burned", replicate2=ifelse(replicate=="unburned", "Unburned", replicate2))
 
-rich.graph <- ggplot(rich.dat, aes(x=year, y=richness)) + geom_line(size = 1.5) + theme_bw() + facet_wrap(~replicate2) 
+rich.graph <- ggplot(rich.dat, aes(x=year, y=richness)) + geom_line(size = 2) + theme_bw() + facet_wrap(~replicate2) 
 
 
 ### Mean rank abundance ###
@@ -39,7 +39,7 @@ KNZ_allturnover<-rbind(KNZ_turnover, KNZ_appearance, KNZ_disappearance)
 
 #Make the graph
 turn.graph <- ggplot(KNZ_allturnover, aes(x=year, y=turnover, color=metric)) + 
-  geom_line(size = 1.5) + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
+  geom_line(size = 2) + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
 
 ### Mean rank shifts ###
 
@@ -51,7 +51,7 @@ KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
 
 # Plot it
 rankshift.graph <- ggplot(KNZ_rankshift, aes(year, MRS)) + 
-  geom_line(size= 1.5) + theme_bw() + facet_wrap(~replicate)
+  geom_line(size= 2) + theme_bw() + facet_wrap(~replicate)
 
 
 ### Rate change ###
@@ -62,7 +62,7 @@ comm.res <- rate_change_interval(collins08,   time.var= "year",
 
 ### Make the graph ###
 rate.graph<-ggplot(comm.res, aes(interval, distance, group = replicate)) + facet_wrap(~replicate) + 
-  geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 1.5)
+  geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 2)
 
 
 ### Put it all together!! ###
@@ -107,46 +107,38 @@ rankclock.graph <- ggplot(aggdat, aes(year, abundance, color = species)) +
 
 
 
-tiff("rank_clock.tiff", width=600, height=400)
+tiff("rank_clock.tiff", width=400, height=300)
 rankclock.graph
 dev.off()
 
-### Make stability graphs ###
-data("knz_001d")
 
-# calculate stability
-stab <- community_stability(knz_001d, replicate.var="subplot")
+# Rank-abundance, just for fun. Different species occur in each, so a bit of work to re-format
+unb <- codyn:::transpose_community(collins08[collins08$replicate=="unburned",],
+                                   tim = "year",
+                                   spec = "species",
+                                   abun= "abundance")
 
-#calculate synchrony via loreau
-synch_loreau<-merge(synchrony(knz_001d, replicate="subplot"), stab)
+ann <- codyn:::transpose_community(collins08[collins08$replicate=="annually burned",],
+                                   tim = "year",
+                                   spec = "species",
+                                   abun= "abundance")
+ranann <- data.frame(abun = sort(apply(ann, 2, mean)/max(ann), decreasing = T), rank = 1:ncol(ann)); ranann$sp = rownames(ranann)
+ranunb <- data.frame(abun = sort(apply(unb, 2, mean)/max(unb), decreasing = T), rank = 1:ncol(unb));ranunb$sp = rownames(ranunb)
+ran.all <- merge(rad.ann, rad.unb, by = "sp", all = T)
+ran.all <- data.frame(spec = rep(ran.all$sp, 2), 
+                      abun = c(ran.all[,2], ran.all[,4]),
+                      rank = c(ran.all[,3], ran.all[,5]),
+                      burn = gl(2, nrow(ran.all), labels = levels(collins08$replicate)))
 
-#calculate synchrony via gross
-synch_gross<-merge(synchrony(knz_001d, replicate="subplot", metric="Gross"), stab)
-
-#calculate VR
-vr <- merge(variance_ratio(knz_001d, replicate.var="subplot", bootnumber=1, average.replicates = F), stab)
-
-# make the graphs
-vr.graph <-ggplot(vr, aes(x=VR, y=stability)) + geom_point(size=3) + #geom_smooth(size=1, method="lm", se=F)+
-  theme_bw() +   theme(text= element_text(size = 14))
-loreau.graph <-ggplot(synch_loreau, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
- # geom_smooth(size=1, method="lm", se=F) + 
-  theme_bw() +   theme(text= element_text(size = 14))
-gross.graph <-ggplot(synch_gross, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
-  #geom_smooth(size=1, method="lm", se=F) + 
-  theme_bw() +   theme(text= element_text(size = 14))
+rankplot <- ggplot(ran.all, aes(rank, abun)) + geom_line(size = 2) + theme_bw() +
+  facet_wrap(~burn) + scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
+                                    labels = trans_format("log10", math_format(10^.x)))
 
 
-
-tiff("stability_graphs.tiff", width=900, height=400)
-grid.arrange(vr.graph + 
-               labs(x="Variance ratio", y="Community stability (mean / std dev)") +
-               theme( plot.margin=unit(c(1,0,1,.5), "cm")),
-             loreau.graph + 
-               labs(x="Synchrony (Loreau)", y="") +
-               theme( plot.margin=unit(c(1,.25,1,.25), "cm")), 
-             gross.graph +
-               labs(x="Synchrony (Gross)", y="")+
-               theme( plot.margin=unit(c(1,.5,1,0), "cm")),
-             ncol=3)
+tiff("rankabun.tiff", width=400, height=300)
+rankplot + labs(x="Ranks", y= "Log relative abundance") +
+  theme(strip.text.x = element_text(size = 14),
+        strip.background = element_blank()) +
+  theme( plot.margin=unit(c(0,1,0,0), "cm"))
 dev.off()
+system("open rankabun.tiff -a /Applications/Preview.app")
