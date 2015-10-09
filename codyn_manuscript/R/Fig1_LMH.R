@@ -107,6 +107,46 @@ rankclock.graph <- ggplot(aggdat, aes(year, abundance, color = species)) +
 
 
 
-tiff("rank_clock.tiff", width=400, height=300)
+tiff("rank_clock.tiff", width=600, height=400)
 rankclock.graph
+dev.off()
+
+### Make stability graphs ###
+data("knz_001d")
+
+# calculate stability
+stab <- community_stability(knz_001d, replicate.var="subplot")
+
+#calculate synchrony via loreau
+synch_loreau<-merge(synchrony(knz_001d, replicate="subplot"), stab)
+
+#calculate synchrony via gross
+synch_gross<-merge(synchrony(knz_001d, replicate="subplot", metric="Gross"), stab)
+
+#calculate VR
+vr <- merge(variance_ratio(knz_001d, replicate.var="subplot", bootnumber=1, average.replicates = F), stab)
+
+# make the graphs
+vr.graph <-ggplot(vr, aes(x=VR, y=stability)) + geom_point(size=3) + #geom_smooth(size=1, method="lm", se=F)+
+  theme_bw() +   theme(text= element_text(size = 14))
+loreau.graph <-ggplot(synch_loreau, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
+ # geom_smooth(size=1, method="lm", se=F) + 
+  theme_bw() +   theme(text= element_text(size = 14))
+gross.graph <-ggplot(synch_gross, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
+  #geom_smooth(size=1, method="lm", se=F) + 
+  theme_bw() +   theme(text= element_text(size = 14))
+
+
+
+tiff("stability_graphs.tiff", width=900, height=400)
+grid.arrange(vr.graph + 
+               labs(x="Variance ratio", y="Community stability (mean / std dev)") +
+               theme( plot.margin=unit(c(1,0,1,.5), "cm")),
+             loreau.graph + 
+               labs(x="Synchrony (Loreau)", y="") +
+               theme( plot.margin=unit(c(1,.25,1,.25), "cm")), 
+             gross.graph +
+               labs(x="Synchrony (Gross)", y="")+
+               theme( plot.margin=unit(c(1,.5,1,0), "cm")),
+             ncol=3)
 dev.off()
