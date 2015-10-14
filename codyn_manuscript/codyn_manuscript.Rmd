@@ -23,9 +23,9 @@ options(digits = 3)
 4. Finally, `codyn` contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
 
 ##Introduction
-As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to vastly expand our understanding of ecology. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of related but temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will underpin many new advances in ecology.
+As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to vastly expand our understanding of ecology. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of related but temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time [@collins2000; @Collins2008; @cleland2013]. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems [@houlahan2007; @Grman2010; @hector2010; @hallett2014]. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will underpin many new advances in ecology.
 
-However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics have not yet been published as functions in R. Although R is becoming the programming language of choice for most ecologists, the majority of ecologists rely on published instead of self-written functions. The primary R package for vegetation analyses, vegan, includes many diversity indices and ordination techniques but does not include temporal metrics of community patterns. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall their general use and application. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their pros and cons.
+However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics have not yet been published as functions in R. Although R is becoming the programming language of choice for most ecologists, the majority of ecologists rely on published instead of self-written functions. The primary R package for vegetation analyses, `vegan`, includes many diversity indices and ordination techniques but does not include temporal metrics of community patterns. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall their general use and application. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their pros and cons.
 
 Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, Manhattan KS.
 
@@ -33,7 +33,7 @@ Here we present a new R package, `codyn`, that fills this niche for published fu
 The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include species turnover (`turnover`), mean shifts in rank abundance (`mean_rank_shift`) [@Collins2008] and rate of directional change in community composition over time (`rate_change`) [@collins2000]. 
 
 ### Species turnover
-Species turnover represents a temporal analog to species richness  [@MacArthur1963; @diamond1969; @Collins2008; @cleland2013]. The function `turnover` calculates three metrics of species turnover: total turnover, appearances, and disappearances.The default metric `total` refers to total turnover, which calculates the proportion of species that differ between timepoints as:
+Species turnover represents a temporal analog to species richness  [@MacArthur1963; @diamond1969; @Collins2008; @cleland2013]. The function `turnover` calculates three metrics of species turnover: total turnover, appearances, and disappearances.The default metric `total` refers to total turnover, which calculates the proportion of species that differ between time points as:
 
 $$ Total\; turnover = \frac{Species\; gained\; +\; Species\; lost}{Total\; species\; observed\; in\; both\; time points} $$
 
@@ -50,7 +50,7 @@ where $N$ is the number of species in common in both time points, $t$ is the tim
 The `rate_change` function provides a measure of the rate and direction of change in a community. Community compositional changes are described by Euclidean distances, which are calculated on pair-wise communities across the entire time series. For example, a data set with 6 time intervals will have distance values for five one-interval time lags (e.g., time 1 vs time 2, time 2 vs time 3 ...), four two-interval time lags (e.g., time 1 vs time 3, time 2 vs time 4 ...) and so forth. These distance values are regressed against the time lag interval. The slope of this relationship indicates the rate and direction of community change [@collins2000].The full dataset of lagged distances is returned using the function `rate_change_interval`.
 
 ###Worked example: Temporal diversity patterns at Konza
-The Konza Prairie LTER is a tallgrass prairie research site in which different watersheds have experienced different experimental fire frequencies. Collins et al. [-@Collins2008] compared the temporal dynamics of grassland plant species in areas of Konza that were either burned annually or unburned. Species abundance data were collected over 18 years in 20 permanently marked 10 $m^2$ circular subplots at an annually burned and an unburned location. To demonstrate the `codyn` package we utilize the Collins et al. [-@Collins2008] dataset, presented in two forms: `collins08` averages species abundances across subplots within burn treatment, and `knz_001d` includes all subplots from the unburned watershed. 
+The Konza Prairie LTER is a tallgrass prairie research site in which different watersheds have experienced different experimental fire frequencies. Collins et al. [-@Collins2008] compared the temporal dynamics of grassland plant species in areas of Konza that were either burned annually or unburned. Species abundance data were collected over 18 years in 20 permanently marked 10 $m^2$ circular subplots at an annually burned and an unburned location. To demonstrate the `codyn` package we utilize the Collins et al. [-@Collins2008] dataset, presented in two forms: `collins08` averages species abundances across subplots within burn treatment, and `knz_001d` includes all subplots from the annually watershed. 
 
 The `codyn` examples of temporal diversity indices utilize the `collins08` dataset:
 ```{r}
@@ -68,16 +68,29 @@ As one method to visualize temporal community change `codyn` includes a vignette
 
 ####Quantifying temporal dynamics
 #####Turnover
-Average annual species richness was higher in the unburned site at Konza, although richness varied a fair amount over time in both sites (Figure 1a). Total turnover indicates that, in addition to higher overall richness, there were also greater fluctuations in the species present in the unburned than burned location at Konza (Figure 1b). This insight helps to contextualize the richness patterns; even between consequentive years with similar species richness, the identity of the species composite species could differ by 30%. Higher species richness in the unburned plots can also be related to the higher overall proportional species appearances in the unburned plots (Figure 2b).
+Average annual species richness was higher in the unburned site at Konza, although richness varied a fair amount over time in both sites (Figure 2a). Total turnover indicates that, in addition to higher overall richness, there were also greater fluctuations in the species present in the unburned than burned location at Konza (Figure 2b). This insight helps to contextualize the richness patterns; even between consequentive years with similar species richness, the identity of the  composite species could differ by 30%. Higher species richness in the unburned plots can also be related to the higher overall proportional species appearances in the unburned plots (Figure 2b). Below is an example of the code to calculate turnover; the remaining functions in `codyn` follow a similar syntax. 
+
+```{r results='asis'}
+KNZ_turnover <- turnover(df = collins08, 
+                       time.var = "year",  
+                       species.var = "species", 
+                       abundance.var = "abundance",  
+                       replicate.var = "replicate",
+                       metric="total")
+```
+```{r echo=FALSE}
+   # KNZ_turnover <-KNZ_turnover[order(KNZ_turnover$year),]
+    kable(KNZ_turnover[1:3,])
+```
 
 #####Mean rank shifts
 Calculating mean rank shifts indicates that the degree of species reordering at the burned and unburned communities diverged around 1992 (Figure 2c). In particular, rank shifts decreased and stabilized in the annually burned site following a substantial spike in species reordering in 1992. This spike corresponds with the marked decline in _Andropogon gerardii_ highlighted by the rank clocks. 
 
 #####Rate of community change
-Rank shifts could reflect continual reshuffling of species within the same community type, or successional change from one community type to another. Calculating the rate of community change at Konza indicates that rank shifts in the annually burned site reflect directional change, whereas rank shifts in the unburned site occur despite a lack of directional change (Figure 2d). Taken together, the three `codyn` diversity indices tell a story of two communities with high species turnover but different degrees of directional change -- both elements of which are masked by non-temporal indices such as richness. 
+Rank shifts could reflect continual reshuffling of species within the same community type, or successional change from one community type to another. Calculating the rate of community change at Konza indicates that rank shifts in the annually burned site reflect directional change, whereas rank shifts in the unburned site occur despite a lack of directional change (Figure 2d). Taken together, the three `codyn` diversity indices tell a story of two communities with high species turnover but different degrees of directional change -- both elements which are masked by non-temporal indices such as richness. 
 
 ##Community stability metrics
-Ecologists have long debated the relationship between species diversity and stability. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) and asynchrony (`synchrony` with two options).
+Ecologists have long debated the relationship between species diversity and stability [@macarthur_1955; @tilman_1996; @cottingham_2001]. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable [@yachi_1999]. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) [@schluter1984; @hallett2014] and asynchrony (`synchrony` with two options) [@loreau2008; @gross2014].
 
 ### Community stability
 The `community_stability` function aggregates species abundances within replicate and time period, and uses these values to calculate community stability as the temporal mean divided by the temporal standard deviation [@tilman1999].
@@ -118,11 +131,7 @@ $$ Synchrony = (1/N){{\sum_{i}Corr(x_i, \sum_{i\neq{j}}{x_j})}}$$
 
 This measure of synchrony is standardized from -1 (perfect asynchrony) to 1 (perfect synchrony) and is centered at 0 when species fluctuate independently. It can be specified in the `synchrony` function. A virtue of this metric is it not sensitive to richness and has the potential for null-model significance testing. It may under-perform on short time series because it is based on correlation, and care should be taken when applying it to communities that contain very stable species (i.e., whose abundances do not change throughout the time series).
 
-Qualititively, the degree to which the synchrony metrics calculated by `Loreau` versus `Gross` will differ depends on the abundance distributions of the species in a community. The `Loreau` method and the variance ratio are both based on variances, and are therefore more heavily influenced by abundant species. In contrast,  the `Gross` method is based on correlation and consequently weights species equally.
-
 ### Worked example: Community stability at Konza
-
-
 The `codyn` examples of temporal diversity indices utilize the `collins08` dataset:
 ```{r}
 library(codyn)
@@ -134,54 +143,174 @@ library(knitr)
 kable(knz_001d[1:3,])
 ```
 
-First, looking at stability. The `community_stability` function calculates $1/CV$, across time points for each replicate. 
-```{r}
+Community stability (i.e., the stability of aggregate cover over time) varied considerably in the annually burned watershed (Figure 3). There was a strong negative relationship between community stability and both the variance ratio and synchrony as calculated by `Loreau` (Figure 3a,b), indicating that greater negative covariance/higher asynchrony was associated with increased stability. This relationship was much weaker for synchrony as calculated by `Gross` (Figure 3c). This is because both the `Loreau` method and the variance ratio are based on variances, and are therefore more heavily influenced by abundant species (which also comprise most of the aggregate cover). In contrast, the `Gross` method is based on correlation and consequently weights all species equally. Differences between the metrics should decrease in more even communities.  
+
+##Installing `codyn`
+To install the version of `codyn` currently on CRAN (website link when this is for real!), type `install.packages("codyn")` followed by `library(codyn)`. The source code for the package is hosted on GitHub at (https://github.com/laurenmh/codyn). Bug reports can be sent using the GitHub issue tracker.
+
+##Acknowledgements
+Work on this package was supported by NSF-ABI grant #1262458 to C Gries, M Jones, and S Collins. Additional support was provided for working group collaboration by the National Center for Ecological Analysis and Synthesis, a center funded by the University of California, Santa Barbara, and the State of California. We thank Carl Boettiger, David Harris and Julie Ripplinger for early discussions. 
+
+##Figures
+
+```{r echo = F, warning=F, include=FALSE, cache=FALSE}
+# make all the figures
+library(knitr)
+options(digits = 3)
+library(ggplot2)
+library(grid)
+library(gridExtra)
 library(codyn)
-data("knz_001d")
+library(dplyr)
+library(tidyr)
 
-KNZ_stability <- community_stability(knz_001d, 
-                                   time.var = "year", 
-                                   abundance.var = "abundance", 
-                                   replicate.var = "subplot")
-kable(head(KNZ_stability))
-boxplot(KNZ_stability$stability)
+### Plain old richness ###
+rich.dat <-collins08 %>%
+  filter(abundance>0) %>%
+  mutate(rich=1) %>%
+  group_by(year, replicate) %>%
+  summarize(richness=sum(rich)) %>%
+  tbl_df() %>%
+  mutate(replicate2="Annually burned", replicate2=ifelse(replicate=="unburned", "Unburned", replicate2))
+
+rich.graph <- ggplot(rich.dat, aes(x=year, y=richness)) + geom_line(size = 2) + theme_bw() + facet_wrap(~replicate2) 
+
+
+### Turnover metric ###
+
+#Run the turnover code
+KNZ_turnover <- turnover(df = collins08,  time.var = "year",  species.var = "species", 
+                         abundance.var = "abundance", replicate.var = "replicate")
+KNZ_appearance <- turnover(df = collins08,  replicate.var = "replicate",  metric = "appearance")
+KNZ_disappearance <- turnover(df = collins08, replicate.var = "replicate", metric = "disappearance")
+
+#Format a compiled data frame
+KNZ_turnover$metric<-"total"
+names(KNZ_turnover)[1]="turnover"
+KNZ_appearance$metric<-"appearance"
+names(KNZ_appearance)[1]="turnover"
+KNZ_disappearance$metric<-"disappearance"
+names(KNZ_disappearance)[1]="turnover"
+KNZ_allturnover<-rbind(KNZ_turnover, KNZ_appearance, KNZ_disappearance)
+
+#Make the graph
+turn.graph <- ggplot(KNZ_allturnover, aes(x=year, y=turnover, color=metric)) + 
+  geom_line(size = 2) + theme_bw() + facet_wrap(~replicate) + theme(legend.position="bottom")
+
+### Mean rank shifts ###
+
+#Run the function
+KNZ_rankshift <- mean_rank_shift(df=collins08,  abundance.var = "abundance", replicate.var = "replicate")
+
+#Select the final time point from the returned time.var_pair
+KNZ_rankshift$year <- as.numeric(substr(KNZ_rankshift$year_pair, 6,9))
+
+# Plot it
+rankshift.graph <- ggplot(KNZ_rankshift, aes(year, MRS)) + 
+  geom_line(size= 2) + theme_bw() + facet_wrap(~replicate)
+
+
+### Rate change ###
+
+#Run the function
+comm.res <- rate_change_interval(collins08,   time.var= "year",    
+                                 species.var= "species",  abundance.var= "abundance", replicate.var = "replicate")
+
+### Make the graph ###
+rate.graph<-ggplot(comm.res, aes(interval, distance, group = replicate)) + facet_wrap(~replicate) + 
+  geom_point() + theme_bw() + stat_smooth(method = "lm", se = F, size = 2)
+
+
+
+
+##Community stability graph
+stab <- community_stability(knz_001d, replicate.var="subplot")
+
+  #calculate synchrony via loreau
+  synch_loreau<-merge(synchrony(knz_001d, replicate="subplot"), stab)
+
+  #calculate synchrony via gross
+  synch_gross<-merge(synchrony(knz_001d, replicate="subplot", metric="Gross"), stab)
+
+#calculate VR
+vr <- merge(variance_ratio(knz_001d, replicate.var="subplot", bootnumber=1, average.replicates = F), stab)
+
+  # make the graphs
+  vr.graph <-ggplot(vr, aes(x=VR, y=stability)) + geom_point(size=3) + #geom_smooth(size=1, method="lm", se=F)+
+   theme_bw() +   theme(text= element_text(size = 14))
+loreau.graph <-ggplot(synch_loreau, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
+   # geom_smooth(size=1, method="lm", se=F) + 
+   theme_bw() +   theme(text= element_text(size = 14))
+gross.graph <-ggplot(synch_gross, aes(x=synchrony, y=stability)) + geom_point(size=3) + 
+   #geom_smooth(size=1, method="lm", se=F) + 
+   theme_bw() +   theme(text= element_text(size = 14))
 
 ```
 
-Variance ratio
-```{r results='asis'}
-KNZ_variance_ratio <- variance_ratio(knz_001d, 
-                                   abundance.var = "abundance", 
-                                   bootnumber = 10, 
-                                   replicate.var = "subplot")
-kable(head(KNZ_variance_ratio))
+```{r, echo=F}
+
+### Rank clocks ###
+aggdat <- aggregate(abundance ~ species * year * replicate,  data = subset(collins08, species == "andrgera" |
+              species == "andrscop" | species == "poaprat"| species == "sorgnuta"), FUN = mean)
+
+aggdat$replicate2 <- "Annually burned"
+aggdat$replicate2 <- ifelse(aggdat$replicate == "unburned", "Unburned", aggdat$replicate2)
+
+## make the graphs
+ggplot(aggdat, aes(year, abundance, color = species)) + 
+  geom_line(size = 2) + coord_polar() + theme_bw() + facet_wrap(~replicate2) + 
+  labs(x="Year", y="Abundance", color="Species") +
+  theme(text= element_text(size = 14), strip.text.x = element_text(size = 14), strip.background = element_blank()) + 
+  theme( legend.position="bottom")
+
 ```
 
-Synchrony
+Figure 1. Rank clock of the four dominant grassland plant species in the annually burned versus unburned locations at the Konza Prairie LTER.
 
-###Comparison between "Loreau" and "Gross"
-Qualititively, the degree to which the synchrony metrics calculated by `Loreau` versus `Gross` will differ depends on the abundance distributions of the species in a community. The `Loreau` method and the variance ratio are both based on variances, and are therefore more heavily influenced by abundant species. In contrast,  the `Gross` method is based on correlation and consequently weights species equally.
-
-```{r results='asis'}
-KNZ_synchrony_Loreau <- synchrony(df = knz_001d, 
-                         time.var = "year", 
-                         species.var = "species", 
-                         abundance.var = "abundance", 
-                         replicate.var = "subplot")
-kable(head(KNZ_synchrony_Loreau))
+```{r, fig.width = 4, fig.height = 6.5, echo=F}
+### Put it all together!! ###
+temporal_diversity_graph <-grid.arrange(rich.graph +
+                 labs(x="Year", y=expression(paste("Richness (no / 10", m^2,")"))) +
+                 theme(strip.text.x = element_text(size = 14),
+                  strip.background = element_blank()) +
+                 theme( plot.margin=unit(c(0,1,0,0), "cm")),
+               turn.graph + 
+                 labs(x="Year", y="Turnover") +
+                 theme(legend.position="none") +
+                theme(strip.background = element_blank(),
+               strip.text.x = element_blank()) +
+                 theme( plot.margin=unit(c(0,1,0,0), "cm")),
+               rankshift.graph + 
+                 labs(x="Year", y="Mean rank shift") +
+                 theme(strip.background = element_blank(),
+                                        strip.text.x = element_blank()) +
+                 theme( plot.margin=unit(c(0,1,0,0), "cm")), 
+               rate.graph +  
+                 labs(x="Time interval", y="Euclidean distance") +
+                 theme(strip.background = element_blank(),
+                                  strip.text.x = element_blank()) +
+                 theme( plot.margin=unit(c(0,1,0,0), "cm"))
+               , ncol=1)
 ```
 
-```{r results='asis'}
-KNZ_synchrony_Gross <- synchrony(df = knz_001d, 
-                           time.var = "year", 
-                           species.var = "species",  
-                           abundance.var = "abundance", 
-                           metric = "Gross", 
-                           replicate.var = "subplot")
+
+Figure 2. Species richness, turnover (total = blue, appearances = red, disappearances = green), mean rank shifts and community change over time for plant species at the annually burned and unburned location at the Konza Prairie LTER.
+
+
+```{r, fig.width = 7, fig.height = 4, echo=F}
+grid.arrange(vr.graph +
+                               labs(x="Variance ratio", y="Community stability (mean / std dev)") +
+                              theme( plot.margin=unit(c(1,0,1,.5), "cm")),
+                           loreau.graph + 
+                              labs(x="Synchrony (Loreau)", y="") +
+                              theme( plot.margin=unit(c(1,.25,1,.25), "cm")), 
+                          gross.graph +
+                             labs(x="Synchrony (Gross)", y="")+
+                              theme( plot.margin=unit(c(1,.5,1,0), "cm")),
+                        ncol=3)
 ```
-                  
-Lauren to add: turnover, rank clocks, mean rank shifts, rate_change
-=======
-###Stability metrics at Konza
+
+Figure 3. Community stability in relation to the variance ratio and two measures of synchrony for subplots in the annually burned location at the Konza Prairie LTER.
+
 
 ##Literature cited
