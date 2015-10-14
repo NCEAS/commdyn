@@ -68,19 +68,13 @@ As one method to visualize temporal community change `codyn` includes a vignette
 
 ####Quantifying temporal dynamics
 #####Turnover
-Quick sentence on richness (Figure 1a)
-Total turnover indicates that in general there were greater fluctuations in the species present in the unburned than burned location at Konza.Parsing total turnover by appearances and disappearances indicates that there were generally more appearances in the unburned than burned location. In addition, total turnover strongnly diverged between locations in 1995 was because the burned location lost many species that year, while the unburned locations lost none (Figure 2b).
+Average annual species richness was higher in the unburned site at Konza, although richness varied a fair amount over time in both sites (Figure 1a). Total turnover indicates that, in addition to higher overall richness, there were also greater fluctuations in the species present in the unburned than burned location at Konza (Figure 1b). This insight helps to contextualize the richness patterns; even between consequentive years with similar species richness, the identity of the species composite species could differ by 30%. Higher species richness in the unburned plots can also be related to the higher overall proportional species appearances in the unburned plots (Figure 2b).
 
-```{r results='asis'}
-KNZ_total_turnover <- turnover(df = collins08, 
-                          species.var = "species",
-                          time.var = "year",
-                          abundance.var = "abundance",
-                          replicate.var = "replicate")
-```
+#####Mean rank shifts
+Calculating mean rank shifts indicates that the degree of species reordering at the burned and unburned communities diverged around 1992 (Figure 2c). In particular, rank shifts decreased and stabilized in the annually burned site following a substantial spike in species reordering in 1992. This spike corresponds with the marked decline in _Andropogon gerardii_ highlighted by the rank clocks. 
 
-
-
+#####Rate of community change
+Rank shifts could reflect continual reshuffling of species within the same community type, or successional change from one community type to another. Calculating the rate of community change at Konza indicates that rank shifts in the annually burned site reflect directional change, whereas rank shifts in the unburned site occur despite a lack of directional change (Figure 2d). Taken together, the three `codyn` diversity indices tell a story of two communities with high species turnover but different degrees of directional change -- both elements of which are masked by non-temporal indices such as richness. 
 
 ##Community stability metrics
 Ecologists have long debated the relationship between species diversity and stability. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) and asynchrony (`synchrony` with two options).
@@ -139,7 +133,7 @@ KNZ_stability <- community_stability(knz_001d,
                                    time.var = "year", 
                                    abundance.var = "abundance", 
                                    replicate.var = "subplot")
-kable(KNZ_stability)
+kable(head(KNZ_stability))
 ```
 
 Variance ratio
@@ -148,7 +142,7 @@ KNZ_variance_ratio <- variance_ratio(knz_001d,
                                    abundance.var = "abundance", 
                                    bootnumber = 10, 
                                    replicate.var = "subplot")
-kable(KNZ_variance_ratio)
+kable(head(KNZ_variance_ratio))
 ```
 
 Synchrony
