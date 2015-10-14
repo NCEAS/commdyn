@@ -1,6 +1,6 @@
 ---
 title: 'codyn: an R package of community dynamics metrics'
-author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
+author: Lauren M. Hallett, Sydney K. Jones,  A. Andrew A. MacDonald,  Matthew B. Jones,
   Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
 date: '`r Sys.Date()`'
 output: word_document
