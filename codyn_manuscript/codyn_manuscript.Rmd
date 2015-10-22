@@ -3,7 +3,7 @@ title: 'codyn: an R package of community dynamics metrics'
 author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
   Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
 date: '`r Sys.Date()`'
-output: pdf_document
+output: html_document
 bibliography: biblio.bib
 ---
 
@@ -256,16 +256,26 @@ aggdat <- aggregate(abundance ~ species * year * replicate,  data = subset(colli
 aggdat$replicate2 <- "Annually burned"
 aggdat$replicate2 <- ifelse(aggdat$replicate == "unburned", "Unburned", aggdat$replicate2)
 
+# rename species for graphing purposes
+aggdat$species <- as.factor(as.character(aggdat$species))
+levels(aggdat$species) = c("Andropogon gerardii", "Schizachyrium scoparium","Poa pratensis", "Sorgastrum nutans")
+
+# add a line at 12:00
+twelve <- data.frame(year = rep(1984,2), abundance = c(0, 1), species = NA)
+library(grid)
 ## make the graphs
 ggplot(aggdat, aes(year, abundance, color = species)) + 
   geom_line(size = 2) + coord_polar() + theme_bw() + facet_wrap(~replicate2) + 
   labs(x="Year", y="Abundance", color="Species") +
   theme(text= element_text(size = 14), strip.text.x = element_text(size = 14), strip.background = element_blank()) + 
-  theme( legend.position="bottom")
+  theme( legend.position="bottom", legend.text=element_text(face = "italic")) +
+  geom_segment(aes(x = 1984, y = 0, xend = 1984, yend = 100), color = "grey20")
+#, arrow = arrow(length = unit(0.5, "cm"), ends = "last"))
+#  geom_vline(xintercept = 1984)
 
 ```
 
-Figure 1. Rank clock of the four dominant grassland plant species in the annually burned versus unburned locations at the Konza Prairie LTER.
+Figure 1. Rank clock of the four dominant grassland plant species in the annually burned versus unburned locations at the Konza Prairie LTER. Vertical black bars show the "12 o'clock" position on the rank clock.
 
 ```{r, fig.width = 4, fig.height = 6.5, echo=F}
 ### Put it all together!! ###
