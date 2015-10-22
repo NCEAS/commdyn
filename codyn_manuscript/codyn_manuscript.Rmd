@@ -25,9 +25,9 @@ options(digits = 3)
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to deepen our understanding of ecological patterns and processes. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of analogous temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time [@collins2000; @Collins2008; @cleland2013]. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems [@houlahan2007; @Grman2010; @hector2010; @hallett2014]. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will drive new advances in ecology.
 
-However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics yet to be made publically available as functions in R. Although R has become the programming language of choice for most ecologists and environmental scientists, the majority of ecologists rely on functions published in public repositories like the Comprehensive R Archive Network (CRAN, http://cran.r-project.org) instead of self-written functions. The primary R package for vegetation analyses, `vegan`, provides a well-stocked toolbox for community ecologists, with an emphasis on diversity indices and ordination techniques, but does not include temporal metrics of community patterns. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall the general use and application of these metrics. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their relative merits.
+However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics yet to be made publically available as functions in R. Although R has become the programming language of choice for most ecologists and environmental scientists, the majority of ecologists rely on functions published in public repositories like the Comprehensive R Archive Network (CRAN, http://cran.r-project.org) instead of self-written functions. The primary R package for vegetation analyses, `vegan`, provides a well-stocked toolbox for community ecologists, with an emphasis on diversity indices and ordination techniques, but does not include temporal metrics that quantify aspects of community dynamics. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall the general use and application of these metrics. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their relative merits.
 
-Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
+Here we present a new R package, `codyn`, that fills this niche for published functions that characterize aspects of temporal communities dynamics Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates or experimental units. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
 
 ##Temporal diversity indices
 The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include species turnover (`turnover`), mean shifts in rank abundance (`mean_rank_shift`) [@Collins2008] and rate of directional change in community composition over time (`rate_change`) [@collins2000]. 
@@ -68,7 +68,7 @@ As one method to visualize temporal community change `codyn` includes a vignette
 
 ####Quantifying temporal dynamics
 #####Turnover
-Average annual species richness was higher in the unburned site at Konza, although richness varied a fair amount over time in both sites (Figure 2a). Total turnover indicates that, in addition to higher overall richness, there were also greater fluctuations in the species present in the unburned than burned location at Konza (Figure 2b). This insight helps to contextualize the richness patterns; even between consequentive years with similar species richness, the identity of the  composite species could differ by 30%. Higher species richness in the unburned plots can also be related to the higher overall proportional species appearances in the unburned plots (Figure 2b). Below is an example of the code to calculate turnover; the remaining functions in `codyn` follow a similar syntax. 
+Average annual species richness was higher in the unburned site at Konza, although richness varied a fair amount over time in both sites (Figure 2a). Total turnover indicates that, in addition to higher overall richness, there were also greater fluctuations in the species present in the unburned than burned location at Konza (Figure 2b). This insight helps to contextualize the richness patterns; even between consecutive years with similar species richness, the identity of the  composite species could differ by 30%. Higher species richness in the unburned plots can also be related to the higher overall proportional species appearances in the unburned plots (Figure 2b). Below is an example of the code to calculate turnover; the remaining functions in `codyn` follow a similar syntax. Note that 'year' in the table below refers to the second year in a two-year comparison; thus '1985' refers to the turnover from 1984 to 1985.
 
 ```{r results='asis'}
 KNZ_turnover <- turnover(df = collins08, 
@@ -90,7 +90,7 @@ Calculating mean rank shifts indicates that the degree of species reordering at 
 Rank shifts could reflect continual reshuffling of species within the same community type, or successional change from one community type to another. Calculating the rate of community change at Konza indicates that rank shifts in the annually burned site reflect directional change, whereas rank shifts in the unburned site occur despite a lack of directional change (Figure 2d). Taken together, the three `codyn` diversity indices tell a story of two communities with high species turnover but different degrees of directional change -- both elements which are masked by non-temporal indices such as richness. 
 
 ##Community stability metrics
-Ecologists have long debated the relationship between species diversity and stability [@macarthur_1955; @tilman_1996; @cottingham_2001]. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community stability remains relatively stable [@yachi_1999]. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) [@schluter1984; @hallett2014] and asynchrony (`synchrony` with two options) [@loreau2008; @gross2014].
+Ecologists have long debated the relationship between species diversity and stability [@macarthur_1955; @tilman_1996; @cottingham_2001]. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. That is, abundance on one species may decline while another increases, resulting in no net change in the aggregate variable net primary production. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community abundance remains relatively stable [@yachi_1999]. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) [@schluter1984; @hallett2014] and asynchrony (`synchrony` with two options) [@loreau2008; @gross2014].
 
 ### Community stability
 The `community_stability` function aggregates species abundances within replicate and time period, and uses these values to calculate community stability as the temporal mean divided by the temporal standard deviation [@tilman1999].
@@ -129,10 +129,10 @@ Gross et al. (2014) developed a metric of synchrony that compares the average co
 
 $$ Synchrony = (1/N){{\sum_{i}Corr(x_i, \sum_{i\neq{j}}{x_j})}}$$
 
-This measure of synchrony is standardized from -1 (perfect asynchrony) to 1 (perfect synchrony) and is centered at 0 when species fluctuate independently. It can be specified in the `synchrony` function. A virtue of this metric is it not sensitive to richness and has the potential for null-model significance testing. It may under-perform on short time series because it is based on correlation, and care should be taken when applying it to communities that contain very stable species (i.e., whose abundances do not change throughout the time series).
+This measure of synchrony is standardized from -1 (perfect asynchrony) to 1 (perfect synchrony) and is centered at 0 when species fluctuate independently. It can be specified in the `synchrony` function. This metric is not sensitive to richness and has the potential for null-model significance testing. It may under-perform on short time series because it is based on correlation, and care should be taken when applying it to communities that contain very stable species (i.e., whose abundances do not change throughout the time series).
 
 ### Worked example: Community stability at Konza
-The `codyn` examples of temporal diversity indices utilize the `collins08` dataset:
+The `codyn` examples of temporal diversity indices utilize the `knz_001d` dataset:
 ```{r}
 library(codyn)
 data("knz_001d")
@@ -261,7 +261,6 @@ aggdat$species <- as.factor(as.character(aggdat$species))
 levels(aggdat$species) = c("Andropogon gerardii", "Schizachyrium scoparium","Poa pratensis", "Sorgastrum nutans")
 
 # add a line at 12:00
-twelve <- data.frame(year = rep(1984,2), abundance = c(0, 1), species = NA)
 library(grid)
 ## make the graphs
 ggplot(aggdat, aes(year, abundance, color = species)) + 
@@ -275,7 +274,7 @@ ggplot(aggdat, aes(year, abundance, color = species)) +
 
 ```
 
-Figure 1. Rank clock of the four dominant grassland plant species in the annually burned versus unburned locations at the Konza Prairie LTER. Vertical black bars show the "12 o'clock" position on the rank clock.
+Figure 1. Rank clock of the four dominant grassland plant species in the annually burned versus unburned locations at Konza Prairie, a long-term ecological research site in Kansas, USA. Vertical black bars show the starting "12 o'clock" position on the rank clock.
 
 ```{r, fig.width = 4, fig.height = 6.5, echo=F}
 ### Put it all together!! ###
@@ -304,7 +303,7 @@ temporal_diversity_graph <-grid.arrange(rich.graph +
 ```
 
 
-Figure 2. Species richness, turnover (total = blue, appearances = red, disappearances = green), mean rank shifts and community change over time for plant species at the annually burned and unburned location at the Konza Prairie LTER.
+Figure 2. Species richness, turnover (total = blue, appearances = red, disappearances = green), mean rank shifts and community change over time for plant species at the annually burned and unburned location at Konza Prairie, a long-term ecological research site in Kansas, USA.
 
 
 ```{r, fig.width = 7, fig.height = 4, echo=F}
@@ -320,7 +319,7 @@ grid.arrange(vr.graph +
                         ncol=3)
 ```
 
-Figure 3. Community stability in relation to the variance ratio and two measures of synchrony for subplots in the annually burned location at the Konza Prairie LTER.
+Figure 3. Community stability in relation to the variance ratio and two measures of synchrony for subplots in the annually burned location at at Konza Prairie, a long-term ecological research site in Kansas, USA.
 
 
 ##Literature cited
