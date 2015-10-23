@@ -3,8 +3,9 @@ title: 'codyn: an R package of community dynamics metrics'
 author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
   Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
 date: '`r Sys.Date()`'
-output: html_document
+output: pdf_document
 bibliography: biblio.bib
+csl: methods-in-ecology-and-evolution.csl
 ---
 
 ```{r echo = F}
@@ -21,6 +22,8 @@ options(digits = 3)
 3. Temporal diversity indices include species turnover, mean rank shifts and rate of community change over time. Community stability metrics calculate overall stability and patterns of species covariance and synchrony over time, and include a novel null-modeling method to test significance. 
 
 4. Finally, `codyn` contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
+
+Key-words: biodiversity analysis, long-term data, synchrony, temporal analysis
 
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to deepen our understanding of ecological patterns and processes. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of analogous temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time [@collins2000; @Collins2008; @cleland2013]. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems [@houlahan2007; @Grman2010; @hector2010; @hallett2014]. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will drive new advances in ecology.
@@ -145,11 +148,11 @@ kable(knz_001d[1:3,])
 
 Community stability (i.e., the stability of aggregate cover over time) varied considerably in the annually burned watershed (Figure 3). There was a strong negative relationship between community stability and both the variance ratio and synchrony as calculated by `Loreau` (Figure 3a,b), indicating that greater negative covariance/higher asynchrony was associated with increased stability. This relationship was much weaker for synchrony as calculated by `Gross` (Figure 3c). This is because both the `Loreau` method and the variance ratio are based on variances, and are therefore more heavily influenced by abundant species (which also comprise most of the aggregate cover). In contrast, the `Gross` method is based on correlation and consequently weights all species equally. Differences between the metrics should decrease in more even communities.  
 
-##Installing `codyn`
-To install the version of `codyn` currently on CRAN (website link when this is for real!), type `install.packages("codyn")` followed by `library(codyn)`. The source code for the package is hosted on GitHub at (https://github.com/laurenmh/codyn). Bug reports can be sent using the GitHub issue tracker.
-
 ##Acknowledgements
 Work on this package was supported by NSF-ABI grant #1262458 to C Gries, M Jones, and S Collins. Additional support was provided for working group collaboration by the National Center for Ecological Analysis and Synthesis, a center funded by the University of California, Santa Barbara, and the State of California. We thank Carl Boettiger, David Harris and Julie Ripplinger for early discussions. 
+
+##Data accessibility
+The `codyn` package is available on CRAN (https://cran.r-project.org/web/packages/codyn/index.html) and GitHub at (https://github.com/laurenmh/codyn). Data used in the examples presented here are included in the package.Bug reports and feature requests can be sent using the GitHub issue tracker.
 
 ##Figures
 
@@ -247,7 +250,7 @@ gross.graph <-ggplot(synch_gross, aes(x=synchrony, y=stability)) + geom_point(si
 
 ```
 
-```{r, echo=F}
+```{r, fig.width = 7, fig.height = 4, echo=F}
 
 ### Rank clocks ###
 aggdat <- aggregate(abundance ~ species * year * replicate,  data = subset(collins08, species == "andrgera" |
