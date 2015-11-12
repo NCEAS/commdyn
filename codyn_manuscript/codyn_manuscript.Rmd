@@ -8,6 +8,8 @@ bibliography: biblio.bib
 csl: methods-in-ecology-and-evolution.csl
 ---
 
+Contact for AAMMD: Department of Zoology, University of British Columbia, Vancouver, BC. V6T 1Z4. macdonald@zoology.ubc.ca
+
 ```{r echo = F}
 # setting up R stuff
 library(knitr)
