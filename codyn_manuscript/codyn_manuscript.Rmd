@@ -1,12 +1,14 @@
 ---
 title: 'codyn: an R package of community dynamics metrics'
-author: Lauren M. Hallett, Sydney K. Jones,  Andrew A. MacDonald,  Matthew B. Jones,
+author: Lauren M. Hallett, Sydney K. Jones,  A. Andrew A. MacDonald,  Matthew B. Jones,
   Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
 date: '`r Sys.Date()`'
 output: pdf_document
 bibliography: biblio.bib
 csl: methods-in-ecology-and-evolution.csl
 ---
+
+Contact for AAMMD: Department of Zoology, University of British Columbia, Vancouver, BC. V6T 1Z4. macdonald@zoology.ubc.ca
 
 ```{r echo = F}
 # setting up R stuff
@@ -28,9 +30,9 @@ Key-words: biodiversity analysis, long-term data, synchrony, temporal analysis
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to deepen our understanding of ecological patterns and processes. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of analogous temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time [@collins2000; @Collins2008; @cleland2013]. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems [@houlahan2007; @Grman2010; @hector2010; @hallett2014]. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will drive new advances in ecology.
 
-However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics yet to be made publically available as functions in R. Although R has become the programming language of choice for most ecologists and environmental scientists, the majority of ecologists rely on functions published in public repositories like the Comprehensive R Archive Network (CRAN, http://cran.r-project.org) instead of self-written functions. The primary R package for vegetation analyses, `vegan`, provides a well-stocked toolbox for community ecologists, with an emphasis on diversity indices and ordination techniques, but does not include temporal metrics that quantify aspects of community dynamics. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall the general use and application of these metrics. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their relative merits.
+However, there are three impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics have not yet been published as functions in R. R is becoming the programming language of choice for most ecologists; the majority of ecologists rely on published instead of self-written functions. The primary R package for vegetation analyses, `vegan`, includes many diversity indices and ordination techniques but does not include temporal metrics of community patterns. Thus, an ecologist seeking to measure temporal dynamics needs to re-write much of the code from scratch. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall their general use and application. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their pros and cons.
 
-Here we present a new R package, `codyn`, that fills this niche for published functions that characterize aspects of temporal communities dynamics Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates or experimental units. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
+Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
 
 ##Temporal diversity indices
 The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include species turnover (`turnover`), mean shifts in rank abundance (`mean_rank_shift`) [@Collins2008] and rate of directional change in community composition over time (`rate_change`) [@collins2000]. 
