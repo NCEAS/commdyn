@@ -12,7 +12,7 @@ bibliography: biblio.bib
 
 ^3^Department of Biology, University of New Mexico, Albuquerque, NM 87131 USA
 
-^4^,Department of Zoology, University of British Columbia, Vancouver, BC V6T 1Z4, Canada
+^4^Department of Zoology, University of British Columbia, Vancouver, BC V6T 1Z4, Canada
 
 ^5^National Center for Ecological Analysis and Synthesis, University of California Santa Barbara 735 State St., Suite 300 Santa Barbara, CA 93101 USA
 
@@ -28,7 +28,7 @@ Phone: + 1 (415) 425-0145
 
 Running title: codyn: Community dynamics analysis
 
-Word count: 3,083
+Word count: 3,098
 
 ```{r echo = F}
 # setting up R stuff
@@ -115,7 +115,7 @@ Calculating mean rank shifts indicates that the degree of species reordering at 
 Rank shifts could reflect continual reshuffling of species within the same community type, or successional change from one community type to another. Calculating the rate of community change at Konza indicates that rank shifts in the annually burned site reflect directional change, whereas rank shifts in the unburned site occur despite a lack of directional change (Figure 2d). Taken together, the three `codyn` diversity indices tell a story of two communities with high species turnover but different degrees of directional change -- both elements which are masked by non-temporal indices such as richness. 
 
 ##Community stability metrics
-Ecologists have long debated the relationship between species diversity and stability [@macarthur_1955; @tilman_1996; @cottingham_2001]. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. That is, abundance on one species may decline while another increases, resulting in no net change in the aggregate variable net primary production. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community abundance remains relatively stable [@yachi_1999]. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) [@schluter1984; @hallett2014] and asynchrony (`synchrony` with two options) [@loreau2008; @gross2014].
+Ecologists have long debated the relationship between species diversity and stability [@macarthur_1955; @tilman_1996; @cottingham_2001]. Unstable species populations may stabilize aggregate community properties if a decrease in one species is compensated for by an increase in another. That is, abundance on one species may decline while another increases, resulting in no net change in the aggregate variable net primary production. In a time series, this should be reflected by a pattern in which species negatively covary or fluctuate asynchronously while total community abundance remains relatively stable [@yachi_1999]. `codyn` includes a function to characterize community stability, `community_stability`, and three metrics to characterize species covariance (`variance_ratio`) [@schluter1984; @hallett2014] and asynchrony (`synchrony` with two options) [@loreau2008; @gross2014]. See another recent R package, `synchrony`, for additional metrics such as Kendall's W [@gouhier_synchrony].
 
 ### Community stability
 The `community_stability` function aggregates species abundances within replicate and time period, and uses these values to calculate community stability as the temporal mean divided by the temporal standard deviation [@tilman1999].
