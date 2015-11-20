@@ -1,29 +1,34 @@
 ---
 title: 'codyn: an R package of community dynamics metrics'
-author: Lauren M. Hallett*, Sydney K. Jones,  A. Andrew A. MacDonald,  Matthew B. Jones,
-  Dan F. B. Flynn, Peter Slaughter, Corinna Gries, Scott L. Collins
-date: '`r Sys.Date()`'
+author: Lauren M. Hallett*^1,2^, Sydney K. Jones^3^,  A. Andrew A. MacDonald^4^,  Matthew B. Jones^5^, Dan F. B. Flynn^6^, Julie Ripplinger^7^, Peter Slaughter^5^, Corinna Gries^8^, Scott L. Collins^3^
 output: word_document
 csl: methods-in-ecology-and-evolution.csl
 bibliography: biblio.bib
 ---
 
-Department of Environmental Science, Policy, and Management, University of California, Berkeley, CA 94720 USA
-Institute of Arctic and Alpine Research, University of Colorado, Boulder, Boulder, CO 80303 USA
+^1^Department of Environmental Science, Policy, and Management, University of California, Berkeley, CA 94720 USA
 
-Department of Biology, University of New Mexico, Albuquerque, NM 87131, USA
+^2^Institute of Arctic and Alpine Research, University of Colorado Boulder, Boulder, CO 80303 USA
 
-Department of Zoology, University of British Columbia, Vancouver, BC. V6T 1Z4. macdonald@zoology.ubc.ca
+^3^Department of Biology, University of New Mexico, Albuquerque, NM 87131 USA
 
-National Center for Ecological Analysis and Synthesis, University of California Santa Barbara 735 State St., Suite 300 Santa Barbara, CA 93101 
+^4^,Department of Zoology, University of British Columbia, Vancouver, BC V6T 1Z4, Canada
 
-The Arnold Arboretum of Harvard University, 1300 Centre Street, Boston, MA 02131 
+^5^National Center for Ecological Analysis and Synthesis, University of California Santa Barbara 735 State St., Suite 300 Santa Barbara, CA 93101 USA
 
-University of Wisconsin, 223A Center for Limnology, 680 North Park Street, Madison, WI 53706
+^6^The Arnold Arboretum of Harvard University, 1300 Centre Street, Boston, MA 02131 USA
+
+^7^School of Life Sciences, Arizona State University, PO Box 874601 Tempe, AZ 85287 USA
+
+^8^University of Wisconsin, 223A Center for Limnology, 680 North Park Street, Madison, WI 53706 USA
 
 *Corresponding author
 Email: lauren.m.hallett@gmail.com
 Phone: + 1 (415) 425-0145
+
+Running title: codyn: Community dynamics analysis
+
+Word count: 3,083
 
 ```{r echo = F}
 # setting up R stuff
@@ -40,20 +45,20 @@ options(digits = 3)
 
 4. Finally, `codyn` contains vignettes that describe methods and reproduce figures from published papers to help users contextualize and apply functions to their own data. 
 
-Key-words: biodiversity analysis, long-term data, synchrony, temporal analysis
+Key-words: biodiversity analysis, long-term data, mean rank shift, rank clock, synchrony, temporal analysis, torus translation, turnover, variance ratio
 
 ##Introduction
 As long-term datasets increase in scope and length, new analytical tools are being developed to capture patterns of species interactions over time. This has the potential to deepen our understanding of ecological patterns and processes. For example, many traditional measurements of community structure, such as diversity indices and rank-abundance curves, represent 'snapshots in time' that poorly capture community dynamics. In contrast, the development of analogous temporal metrics, such as species turnover and rank shifts, has highlighted how much communities can vary over time [@collins2000; @Collins2008; @cleland2013]. Similarly, species dynamics can affect the stability of community properties. A growing number of synthesis studies have applied new metrics to long-term datasets to test what factors influence the stability of ecosystems [@houlahan2007; @Grman2010; @hector2010; @hallett2014]. As ecological records continue to grow and data storage and sharing barriers diminish, it is likely that these types of long-term studies will drive new advances in ecology.
 
 However, there are several impediments to the broad adoption of temporal analyses by the ecological community. First, many metrics of community dynamics have not yet been published as functions in R. Although R is becoming the programming language of choice for most ecologists, the majority of ecologists rely on published instead of self-written functions. The primary R package for vegetation analyses, `vegan`, provides a well-stocked toolbox for community ecologists, including many diversity indices and ordination techniques, but does not include temporal metrics of community patterns [@veganPackage]. Thus, an ecologist seeking to measure temporal dynamics needs to write much of the code from scratch. Second, most temporal metrics are applied to datasets that include spatial as well as temporal replication. This adds an additional layer of complexity that may stall their general use and application. Third, many metrics of temporal dynamics are actively being developed, and so ecologists may be unfamiliar with the metrics available and their relative merits.
 
-Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
+Here we present a new R package, `codyn`, that fills this niche for published functions that characterize communities over time. Short for “community dynamics,” `codyn` functions are explicitly temporal and can be easily implemented over multiple spatial replicates or experimental treatments. Functions in `codyn` fall into two categories: temporal diversity indices and community stability metrics. Below we describe the metrics by category and demonstrate their application with examples from the Konza Prairie Long-Term Ecological Research (LTER) Site, in Kansas, USA.
 
 ##Temporal diversity indices
 The diversity indices in `codyn` are temporal analogs to traditional diversity indices such as richness and rank-abundance curves. They include species turnover (`turnover`), mean shifts in rank abundance (`mean_rank_shift`) [@Collins2008] and rate of directional change in community composition over time (`rate_change`) [@collins2000]. 
 
 ### Species turnover
-Species turnover represents a temporal analog to species richness  [@MacArthur1963; @diamond1969; @Collins2008; @cleland2013]. The function `turnover` calculates three metrics of species turnover: total turnover, appearances, and disappearances.The default metric `total` refers to total turnover, which calculates the proportion of species that differ between time points as:
+Species turnover represents a temporal analog to species richness  [@MacArthur1963; @diamond1969; @Collins2008; @cleland2013]. The function `turnover` calculates three metrics of species turnover: total turnover, appearances, and disappearances. The default metric `total` refers to total turnover, which calculates the proportion of species that differ between time points as:
 
 $$ Total\; turnover = \frac{Species\; gained\; +\; Species\; lost}{Total\; species\; observed\; in\; both\; time points} $$
 
@@ -67,10 +72,10 @@ $$ MRS = {\sum_{i=1}^{N} (|R_i,t+1 - R_i,t|})/N $$
 where $N$ is the number of species in common in both time points, $t$ is the time point,and $R_i,t$ is the relative rank of species $i$ in time $t$.
 
 ### Rate of community change
-The `rate_change` function provides a measure of the rate and direction of change in a community. Community compositional changes are described by Euclidean distances, which are calculated on pair-wise communities across the entire time series. For example, a data set with 6 time intervals will have distance values for five one-interval time lags (e.g., $t_1$ vs. $t_2$, $t_2$ vs. $t_3$...), four two-interval time lags (e.g., $t_1$ vs. $t_3$, $t_2$ vs. $t_4$...) and so forth. These distance values are regressed against the time lag interval. The slope of this relationship indicates the rate and direction of community change [@collins2000].The full dataset of lagged distances is returned using the function `rate_change_interval`.
+The `rate_change` function provides a measure of the rate and direction of change in a community. Community compositional changes are described by Euclidean distances, which are calculated on pair-wise communities across the entire time series. For example, a data set with six time intervals will have distance values for five one-interval time lags (e.g., $t_1$ vs. $t_2$, $t_2$ vs. $t_3$...), four two-interval time lags (e.g., $t_1$ vs. $t_3$, $t_2$ vs. $t_4$...) and so forth. These distance values are regressed against the time lag interval. The slope of this relationship indicates the rate and direction of community change [@collins2000].The full dataset of lagged distances is returned using the function `rate_change_interval`.
 
 ###Worked example: Temporal diversity patterns at Konza
-The Konza Prairie LTER is a tallgrass prairie research site in which different watersheds have experienced different experimental fire frequencies. Collins et al. [-@Collins2008] compared the temporal dynamics of grassland plant species in areas of Konza that were either burned annually or unburned. Species abundance data were collected over 18 years in 20 permanently marked 10 $m^2$ circular subplots at an annually burned and an unburned location. To demonstrate the `codyn` package we utilize the Collins et al. [-@Collins2008] dataset, presented in two forms: `collins08` averages species abundances across subplots within burn treatment, and `knz_001d` includes all subplots from the annually watershed. 
+The Konza Prairie LTER is a tallgrass prairie research site in which different watersheds have experienced different experimental fire frequencies. Collins et al. [-@Collins2008] compared the temporal dynamics of grassland plant species in areas of Konza that were either burned annually or unburned. Species abundance data were collected over 18 years in 20 permanently marked 10 $m^2$ circular subplots at an annually burned and an unburned location. To demonstrate the `codyn` package we utilize the Collins et al. [-@Collins2008] dataset, presented in two forms: `collins08`, which averages species abundances across subplots within burn treatment, and `knz_001d`, which includes all subplots from the annually watershed. 
 
 The `codyn` examples of temporal diversity indices utilize the `collins08` dataset:
 ```{r}
@@ -166,10 +171,10 @@ kable(knz_001d[1:3,])
 Community stability (i.e., the stability of aggregate cover over time) varied considerably in the annually burned watershed (Figure 3). There was a strong negative relationship between community stability and both the variance ratio and synchrony as calculated by `Loreau` (Figure 3a,b), indicating that greater negative covariance/higher asynchrony was associated with increased stability. This relationship was much weaker for synchrony as calculated by `Gross` (Figure 3c). This is because both the `Loreau` method and the variance ratio are based on variances, and are therefore more heavily influenced by abundant species (which also comprise most of the aggregate cover). In contrast, the `Gross` method is based on correlation and consequently weights all species equally. Differences between the metrics should decrease in more even communities.  
 
 ##Acknowledgements
-Work on this package was supported by NSF-ABI grant #1262458 to C Gries, M Jones, and S Collins. Additional support was provided for working group collaboration by the National Center for Ecological Analysis and Synthesis, a center funded by the University of California, Santa Barbara, and the State of California. We thank Carl Boettiger, David Harris and Julie Ripplinger for early discussions. 
+Work on this package was supported by NSF-ABI grant #1262458 to C Gries, M Jones, and S Collins. Additional support was provided for working group collaboration by the National Center for Ecological Analysis and Synthesis, a center funded by the University of California, Santa Barbara, and the State of California. We thank Carl Boettiger and David Harris for early discussions. 
 
 ##Data accessibility
-The `codyn` package is available on CRAN (https://cran.r-project.org/web/packages/codyn/index.html) and GitHub at (https://github.com/laurenmh/codyn). Data used in the examples presented here are included in the package.Bug reports and feature requests can be sent using the GitHub issue tracker.
+The `codyn` package is available on CRAN (https://cran.r-project.org/web/packages/codyn/index.html) and GitHub at (https://github.com/laurenmh/codyn). Data used in the examples presented here are included in the package. Bug reports and feature requests can be sent using the GitHub issue tracker.
 
 ##Figures
 
